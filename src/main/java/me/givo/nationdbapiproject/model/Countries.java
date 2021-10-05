@@ -1,0 +1,145 @@
+package me.givo.nationdbapiproject.model;
+
+import java.math.BigDecimal;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "countries")
+public class Countries {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "country_id", length = 11, nullable = false)
+    private Integer countryId;
+
+    @Column(name = "name", length = 50, nullable = true)
+    private String name;
+
+    @Column(name = "area", nullable = false)
+    private BigDecimal area;
+
+    @Column(name = "national_day", nullable = true)
+    private java.sql.Date nationalDay;
+
+    @Column(name = "country_code2", length = 2, nullable = false)
+    private String countryCode2;
+
+    @Column(name = "country_code3", length = 3, nullable = false)
+    private String countryCode3;
+
+    public Integer getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Integer countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getArea() {
+        return area;
+    }
+
+    public void setArea(BigDecimal area) {
+        this.area = area;
+    }
+
+    public java.sql.Date getNationalDay() {
+        return nationalDay;
+    }
+
+    public void setNational_day(java.sql.Date nationalDay) {
+        this.nationalDay = nationalDay;
+    }
+
+    public String getCountryCode2() {
+        return countryCode2;
+    }
+
+    public void setCountryCode2(String countryCode2) {
+        this.countryCode2 = countryCode2;
+    }
+
+    public String getCountryCode3() {
+        return countryCode3;
+    }
+
+    public void setCountryCode3(String countryCode3) {
+        this.countryCode3 = countryCode3;
+    }
+
+    @Override
+    public String toString() {
+        return "Countries [area=" + area + ", country_code2=" + countryCode2 + ", country_code3=" + countryCode3
+                + ", country_id=" + countryId + ", name=" + name + ", national_day=" + nationalDay + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((area == null) ? 0 : area.hashCode());
+        result = prime * result + ((countryCode2 == null) ? 0 : countryCode2.hashCode());
+        result = prime * result + ((countryCode3 == null) ? 0 : countryCode3.hashCode());
+        result = prime * result + ((countryId == null) ? 0 : countryId.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((nationalDay == null) ? 0 : nationalDay.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Countries other = (Countries) obj;
+        if (area == null) {
+            if (other.area != null)
+                return false;
+        } else if (!area.equals(other.area))
+            return false;
+        if (countryCode2 == null) {
+            if (other.countryCode2 != null)
+                return false;
+        } else if (!countryCode2.equals(other.countryCode2))
+            return false;
+        if (countryCode3 == null) {
+            if (other.countryCode3 != null)
+                return false;
+        } else if (!countryCode3.equals(other.countryCode3))
+            return false;
+        if (countryId == null) {
+            if (other.countryId != null)
+                return false;
+        } else if (!countryId.equals(other.countryId))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (nationalDay == null) {
+            if (other.nationalDay != null)
+                return false;
+        } else if (!nationalDay.equals(other.nationalDay))
+            return false;
+        return true;
+    }
+
+}
