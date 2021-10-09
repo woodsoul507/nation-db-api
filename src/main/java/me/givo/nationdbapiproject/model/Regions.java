@@ -1,8 +1,5 @@
 package me.givo.nationdbapiproject.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -31,9 +27,13 @@ public class Regions {
     @JoinColumn(name = "continent_id", referencedColumnName = "continent_id")
     private Continents continents;
 
-    @OneToMany(targetEntity = Countries.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "region_id", referencedColumnName = "region_id")
-    private List<Countries> countries = new ArrayList<>();
+    public Regions() {
+    }
+
+    public Regions(String name, Continents continents) {
+        this.name = name;
+        this.continents = continents;
+    }
 
     public Integer getRegionId() {
         return regionId;
@@ -59,18 +59,9 @@ public class Regions {
         this.continents = continents;
     }
 
-    public List<Countries> getCountries() {
-        return countries;
-    }
-
-    public void setCountries(List<Countries> countries) {
-        this.countries = countries;
-    }
-
     @Override
     public String toString() {
-        return "Regions [continents=" + continents + ", countries=" + countries + ", name=" + name + ", region_id="
-                + regionId + "]";
+        return "Regions [continents=" + continents + ", name=" + name + ", regionId=" + regionId + "]";
     }
 
     @Override
@@ -78,7 +69,6 @@ public class Regions {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((continents == null) ? 0 : continents.hashCode());
-        result = prime * result + ((countries == null) ? 0 : countries.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((regionId == null) ? 0 : regionId.hashCode());
         return result;
@@ -97,11 +87,6 @@ public class Regions {
             if (other.continents != null)
                 return false;
         } else if (!continents.equals(other.continents))
-            return false;
-        if (countries == null) {
-            if (other.countries != null)
-                return false;
-        } else if (!countries.equals(other.countries))
             return false;
         if (name == null) {
             if (other.name != null)

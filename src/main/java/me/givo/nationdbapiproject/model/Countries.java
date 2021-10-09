@@ -1,12 +1,20 @@
 package me.givo.nationdbapiproject.model;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -32,6 +40,26 @@ public class Countries {
 
     @Column(name = "country_code3", length = 3, nullable = false)
     private String countryCode3;
+
+    @ManyToOne(targetEntity = Regions.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id", referencedColumnName = "region_id")
+    private Regions regions;
+
+    @OneToMany(mappedBy = "countries", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CountryLanguages> countryLanguages = new HashSet<CountryLanguages>();
+
+    public Countries() {
+    }
+
+    public Countries(String name, BigDecimal area, Date nationalDay, String countryCode2, String countryCode3,
+            Regions regions) {
+        this.name = name;
+        this.area = area;
+        this.regions = regions;
+        this.nationalDay = nationalDay;
+        this.countryCode2 = countryCode2;
+        this.countryCode3 = countryCode3;
+    }
 
     public Integer getCountryId() {
         return countryId;
@@ -61,7 +89,7 @@ public class Countries {
         return nationalDay;
     }
 
-    public void setNational_day(java.sql.Date nationalDay) {
+    public void setNationalDay(java.sql.Date nationalDay) {
         this.nationalDay = nationalDay;
     }
 
@@ -81,10 +109,19 @@ public class Countries {
         this.countryCode3 = countryCode3;
     }
 
+    public Set<CountryLanguages> getCountryLanguages() {
+        return countryLanguages;
+    }
+
+    public void setCountryLanguages(Set<CountryLanguages> countryLanguages) {
+        this.countryLanguages.addAll(countryLanguages);
+    }
+
     @Override
     public String toString() {
-        return "Countries [area=" + area + ", country_code2=" + countryCode2 + ", country_code3=" + countryCode3
-                + ", country_id=" + countryId + ", name=" + name + ", national_day=" + nationalDay + "]";
+        return "Countries [area=" + area + ", countryCode2=" + countryCode2 + ", countryCode3=" + countryCode3
+                + ", countryId=" + countryId + ", countryLanguages=" + countryLanguages + ", name=" + name
+                + ", nationalDay=" + nationalDay + ", regions=" + regions + "]";
     }
 
     @Override
@@ -95,8 +132,10 @@ public class Countries {
         result = prime * result + ((countryCode2 == null) ? 0 : countryCode2.hashCode());
         result = prime * result + ((countryCode3 == null) ? 0 : countryCode3.hashCode());
         result = prime * result + ((countryId == null) ? 0 : countryId.hashCode());
+        result = prime * result + ((countryLanguages == null) ? 0 : countryLanguages.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((nationalDay == null) ? 0 : nationalDay.hashCode());
+        result = prime * result + ((regions == null) ? 0 : regions.hashCode());
         return result;
     }
 
@@ -129,6 +168,11 @@ public class Countries {
                 return false;
         } else if (!countryId.equals(other.countryId))
             return false;
+        if (countryLanguages == null) {
+            if (other.countryLanguages != null)
+                return false;
+        } else if (!countryLanguages.equals(other.countryLanguages))
+            return false;
         if (name == null) {
             if (other.name != null)
                 return false;
@@ -138,6 +182,11 @@ public class Countries {
             if (other.nationalDay != null)
                 return false;
         } else if (!nationalDay.equals(other.nationalDay))
+            return false;
+        if (regions == null) {
+            if (other.regions != null)
+                return false;
+        } else if (!regions.equals(other.regions))
             return false;
         return true;
     }

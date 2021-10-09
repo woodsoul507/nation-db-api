@@ -1,38 +1,66 @@
 package me.givo.nationdbapiproject.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "country_languages")
 public class CountryLanguages {
 
-    @Id
-    @Column(name = "country_id", length = 11, nullable = false)
-    private Integer countryId;
+    @EmbeddedId
+    private CountryLanguagesId id;
 
-    @Column(name = "language_id", length = 11, nullable = false)
-    private Integer languageId;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @MapsId("countryId")
+    @JoinColumn(name = "country_id")
+    private Countries countries;
+
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @MapsId("languageId")
+    @JoinColumn(name = "language_id")
+    private Languages languages;
 
     @Column(name = "official", length = 1, nullable = false)
     private Integer official;
 
-    public Integer getCountryId() {
-        return countryId;
+    public CountryLanguages() {
     }
 
-    public void setCountryId(Integer countryId) {
-        this.countryId = countryId;
+    public CountryLanguages(Countries countries, Languages languages, Integer official) {
+        this.id = new CountryLanguagesId(countries.getCountryId(), languages.getLanguageId());
+        this.countries = countries;
+        this.languages = languages;
+        this.official = official;
     }
 
-    public Integer getLanguageId() {
-        return languageId;
+    public CountryLanguagesId getId() {
+        return id;
     }
 
-    public void setLanguageId(Integer languageId) {
-        this.languageId = languageId;
+    public void setId(CountryLanguagesId id) {
+        this.id = id;
+    }
+
+    public Countries getCountries() {
+        return countries;
+    }
+
+    public void setCountries(Countries countries) {
+        this.countries = countries;
+    }
+
+    public Languages getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(Languages languages) {
+        this.languages = languages;
     }
 
     public Integer getOfficial() {
@@ -45,45 +73,15 @@ public class CountryLanguages {
 
     @Override
     public String toString() {
-        return "CountryLanguages [country_id=" + countryId + ", language_id=" + languageId + ", official=" + official
-                + "]";
+        return "CountryLanguages [countries=" + countries.getName() + ", id=" + id + ", languages="
+                + languages.getLanguage() + ", official=" + official + "]";
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((countryId == null) ? 0 : countryId.hashCode());
-        result = prime * result + ((languageId == null) ? 0 : languageId.hashCode());
-        result = prime * result + ((official == null) ? 0 : official.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        CountryLanguages other = (CountryLanguages) obj;
-        if (countryId == null) {
-            if (other.countryId != null)
-                return false;
-        } else if (!countryId.equals(other.countryId))
-            return false;
-        if (languageId == null) {
-            if (other.languageId != null)
-                return false;
-        } else if (!languageId.equals(other.languageId))
-            return false;
-        if (official == null) {
-            if (other.official != null)
-                return false;
-        } else if (!official.equals(other.official))
-            return false;
-        return true;
+    public CountryLanguages(CountryLanguagesId id, Countries countries, Languages languages, Integer official) {
+        this.id = id;
+        this.countries = countries;
+        this.languages = languages;
+        this.official = official;
     }
 
 }

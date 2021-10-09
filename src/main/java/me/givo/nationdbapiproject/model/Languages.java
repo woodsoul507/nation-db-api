@@ -1,10 +1,14 @@
 package me.givo.nationdbapiproject.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,12 +23,22 @@ public class Languages {
     @Column(name = "language", length = 50, nullable = false)
     private String language;
 
+    @OneToMany(mappedBy = "languages", orphanRemoval = true)
+    private Set<CountryLanguages> countryLanguages = new HashSet<CountryLanguages>();
+
+    public Languages() {
+    }
+
+    public Languages(String language) {
+        this.language = language;
+    }
+
     public Integer getLanguageId() {
         return languageId;
     }
 
-    public void setLanguageId(Integer language_id) {
-        this.languageId = language_id;
+    public void setLanguageId(Integer languageId) {
+        this.languageId = languageId;
     }
 
     public String getLanguage() {
@@ -35,40 +49,24 @@ public class Languages {
         this.language = language;
     }
 
+    public Set<CountryLanguages> getCountryLanguages() {
+        return countryLanguages;
+    }
+
+    public void setCountryLanguages(Set<CountryLanguages> countryLanguages) {
+        this.countryLanguages.addAll(countryLanguages);
+    }
+
     @Override
     public String toString() {
-        return "Languages [language=" + language + ", language_id=" + languageId + "]";
+        return "Languages [countryLanguages=" + countryLanguages + ", language=" + language + ", languageId="
+                + languageId + "]";
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((language == null) ? 0 : language.hashCode());
-        result = prime * result + ((languageId == null) ? 0 : languageId.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Languages other = (Languages) obj;
-        if (language == null) {
-            if (other.language != null)
-                return false;
-        } else if (!language.equals(other.language))
-            return false;
-        if (languageId == null) {
-            if (other.languageId != null)
-                return false;
-        } else if (!languageId.equals(other.languageId))
-            return false;
-        return true;
+    public Languages(Integer languageId, String language, Set<CountryLanguages> countryLanguages) {
+        this.languageId = languageId;
+        this.language = language;
+        this.countryLanguages = countryLanguages;
     }
 
 }

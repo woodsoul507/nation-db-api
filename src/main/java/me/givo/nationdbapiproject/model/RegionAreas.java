@@ -36,7 +36,7 @@ public class RegionAreas {
 
     @Override
     public String toString() {
-        return "RegionAreas [region_area=" + regionArea + ", region_name=" + regionName + "]";
+        return "RegionAreas [regionArea=" + regionArea + ", regionName=" + regionName + "]";
     }
 
     @Override
