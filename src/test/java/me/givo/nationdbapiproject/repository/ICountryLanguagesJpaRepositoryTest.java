@@ -5,13 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Set;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import me.givo.nationdbapiproject.model.Continents;
 import me.givo.nationdbapiproject.model.Countries;
@@ -19,7 +23,9 @@ import me.givo.nationdbapiproject.model.CountryLanguages;
 import me.givo.nationdbapiproject.model.Languages;
 import me.givo.nationdbapiproject.model.Regions;
 
-@DataJpaTest
+@SpringBootTest
+// @DataJpaTest
+@TestMethodOrder(OrderAnnotation.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class ICountryLanguagesJpaRepositoryTest {
 
@@ -34,96 +40,57 @@ public class ICountryLanguagesJpaRepositoryTest {
         @Autowired
         private ICountryLanguagesJpaRepository countryLanguages;
 
+        Continents pulatina = new Continents("Pulatina");
+        Regions mastil = new Regions("Mastil", pulatina);
+        Languages patuano = new Languages("Patuano");
+        Languages xramano = new Languages("Xramano");
+        Countries patu = new Countries("Patu", new BigDecimal(444444), new Date(55555L), "PU", "PTU", mastil);
+        Countries xrama = new Countries("Xrama", new BigDecimal(999999), new Date(7777L), "XM", "XRA", mastil);
+        CountryLanguages cLPatuano = new CountryLanguages(patu, patuano, 0);
+        CountryLanguages cLXramano = new CountryLanguages(xrama, xramano, 1);
+
         @Test
-        public void saveAndRemoveCountryLanguages() {
+        @Order(1)
+        public void saveNewCountryRecord() {
 
-                Continents america = new Continents("America");
+                continents.saveAndFlush(pulatina);
 
-                continents.save(america);
+                assertEquals("Pulatina", continents.findByName("Pulatina").getName());
 
-                Regions caribe = new Regions("Caribe", continents.getById(1));
+                regions.saveAndFlush(mastil);
 
-                regions.save(caribe);
+                assertEquals("Mastil", regions.findByName("Mastil").getName());
 
-                Languages patuano = new Languages("Patuano");
-                Languages xramano = new Languages("Xramano");
-                languages.saveAll(Arrays.asList(patuano, xramano));
+                languages.saveAllAndFlush(Arrays.asList(patuano, xramano));
 
-                Countries patu = new Countries("Patu", new BigDecimal(4345452), new Date(23234344L), "PU", "PTU",
-                                regions.findByName("Caribe"));
-                Countries xrama = new Countries("Xrama", new BigDecimal(97867), new Date(4434344L), "XM", "XRA",
-                                regions.findByName("Caribe"));
+                assertEquals("Patuano", languages.findByLanguage("Patuano").getLanguage());
+                assertEquals("Xramano", languages.findByLanguage("Xramano").getLanguage());
 
-                countries.saveAll(Arrays.asList(patu, xrama));
+                countries.saveAllAndFlush(Arrays.asList(patu, xrama));
+                countryLanguages.saveAllAndFlush(Arrays.asList(cLPatuano, cLXramano));
+                countries.findByName("Patu").setCountryLanguages(Set.of(countryLanguages.findByLanguages(patuano)));
+                countries.findByName("Xrama").setCountryLanguages(Set.of(countryLanguages.findByLanguages(xramano)));
 
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
+                assertEquals("Patu", countries.findByName("Patu").getName());
+                assertEquals("Xrama", countries.findByName("Xrama").getName());
 
-                System.out.println("Creating and saving CountryLanguages");
+        }
 
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
-
-                CountryLanguages bp1 = new CountryLanguages(countries.findByName("Patu"), languages.getById(1), 0);
-                CountryLanguages bp2 = new CountryLanguages(countries.findByName("Xrama"), languages.getById(2), 1);
-                countryLanguages.saveAll(Arrays.asList(bp1, bp2));
-
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
-
-                System.out.println("Adding CountryLanguages to Countries");
-
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
-
-                countries.findByName("Patu").setCountryLanguages(countryLanguages.findAll().stream()
-                                .filter(l -> l.getCountries().getName().equals("Patu")).collect(Collectors.toSet()));
-                countries.findByName("Xrama").setCountryLanguages(countryLanguages.findAll().stream()
-                                .filter(l -> l.getCountries().getName().equals("Xrama")).collect(Collectors.toSet()));
-
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
-
-                System.out.println("Adding CountryLanguages to Countries DONE!");
-
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
-
-                assertEquals(2, countries.count());
-
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
-
-                System.out.println(countries.findByName("Patu"));
-                System.out.println(countries.findByName("Xrama"));
-
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
+        @Test
+        @Order(2)
+        public void removeNewCountryRecord() {
 
                 countries.delete(countries.findByName("Patu"));
-                countries.delete(countries.findByName("Xrama"));
-
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
-
-                System.out.println(countries.findByName("Patu"));
-                System.out.println(countries.findByName("Xrama"));
-
-                System.out.println("/");
-                System.out.println("|");
-                System.out.println("/");
-
                 assertEquals(null, countries.findByName("Patu"));
+
+                countries.delete(countries.findByName("Xrama"));
                 assertEquals(null, countries.findByName("Xrama"));
+
+                regions.delete(regions.findByName("Mastil"));
+                assertEquals(null, regions.findByName("Mastil"));
+
+                continents.delete(continents.findByName("Pulatina"));
+                assertEquals(null, regions.findByName("Pulatina"));
 
         }
 

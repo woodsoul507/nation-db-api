@@ -41,11 +41,11 @@ public class Countries {
     @Column(name = "country_code3", length = 3, nullable = false)
     private String countryCode3;
 
-    @ManyToOne(targetEntity = Regions.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Regions.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     private Regions regions;
 
-    @OneToMany(mappedBy = "countries", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "countries", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<CountryLanguages> countryLanguages = new HashSet<CountryLanguages>();
 
     public Countries() {

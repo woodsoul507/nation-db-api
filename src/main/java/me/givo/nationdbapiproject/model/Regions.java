@@ -23,7 +23,7 @@ public class Regions {
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @ManyToOne(targetEntity = Continents.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Continents.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "continent_id", referencedColumnName = "continent_id")
     private Continents continents;
 

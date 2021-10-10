@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@DataJpaTest
+@SpringBootTest
+// @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-// @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class IContinentsJpaRepositoryTest {
 
     @Autowired
@@ -20,7 +21,17 @@ public class IContinentsJpaRepositoryTest {
     @Test
     public void shouldBeSevenContinents() {
 
+        assertEquals("Pulatina", repository.findByName("Pulatina").getName());
+
+        assertEquals(8, repository.findAll().size());
+
+        System.out.println(repository.findAll());
+
+        repository.delete(repository.findByName("Pulatina"));
+
         assertEquals(7, repository.findAll().size());
+
+        System.out.println(repository.findAll());
 
     }
 
