@@ -2,6 +2,9 @@ package me.givo.nationdbapiproject.repository;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Order;
@@ -33,6 +36,8 @@ public class StatsCrudOperationsJpaRepositoryTest {
 
                 countryStats.saveAndFlush(afga1);
 
+                assertEquals(2023, countryStats.findById(afga1.getId()).get().getYear());
+
         }
 
         @Test
@@ -43,6 +48,8 @@ public class StatsCrudOperationsJpaRepositoryTest {
                                 new BigDecimal("1232323.2323"));
 
                 countryStats.delete(afga1);
+
+                assertNotEquals(afga1, countryStats.findById(afga1.getId()));
 
         }
 

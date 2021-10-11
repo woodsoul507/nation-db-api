@@ -18,6 +18,14 @@ public class RegionAreas {
     @Column(name = "region_area", nullable = false)
     private BigDecimal regionArea;
 
+    public RegionAreas() {
+    }
+
+    public RegionAreas(String regionName, BigDecimal regionArea) {
+        this.regionName = regionName;
+        this.regionArea = regionArea;
+    }
+
     public String getRegionName() {
         return regionName;
     }
