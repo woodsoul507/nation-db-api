@@ -24,7 +24,7 @@ public class Languages {
     @Column(name = "language", length = 50, nullable = false)
     private String language;
 
-    @OneToMany(mappedBy = "languages", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "languages", orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<CountryLanguages> countryLanguages = new HashSet<CountryLanguages>();
 
     public Languages() {

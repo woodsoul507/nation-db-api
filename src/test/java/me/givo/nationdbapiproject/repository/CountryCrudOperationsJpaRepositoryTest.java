@@ -14,7 +14,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import me.givo.nationdbapiproject.model.Continents;
@@ -24,10 +23,9 @@ import me.givo.nationdbapiproject.model.Languages;
 import me.givo.nationdbapiproject.model.Regions;
 
 @SpringBootTest
-// @DataJpaTest
 @TestMethodOrder(OrderAnnotation.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-public class ICountryLanguagesJpaRepositoryTest {
+public class CountryCrudOperationsJpaRepositoryTest {
 
         @Autowired
         private ICountriesJpaRepository countries;

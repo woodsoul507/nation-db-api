@@ -1,6 +1,5 @@
 package me.givo.nationdbapiproject.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +22,7 @@ public class Regions {
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @ManyToOne(targetEntity = Continents.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Continents.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "continent_id", referencedColumnName = "continent_id")
     private Continents continents;
 

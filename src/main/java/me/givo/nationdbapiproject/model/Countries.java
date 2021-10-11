@@ -41,7 +41,7 @@ public class Countries {
     @Column(name = "country_code3", length = 3, nullable = false)
     private String countryCode3;
 
-    @ManyToOne(targetEntity = Regions.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Regions.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     private Regions regions;
 
@@ -121,7 +121,7 @@ public class Countries {
     public String toString() {
         return "Countries [area=" + area + ", countryCode2=" + countryCode2 + ", countryCode3=" + countryCode3
                 + ", countryId=" + countryId + ", countryLanguages=" + countryLanguages + ", name=" + name
-                + ", nationalDay=" + nationalDay + ", regions=" + regions + "]";
+                + ", nationalDay=" + nationalDay + ", regions=" + regions.getName() + "]";
     }
 
     @Override
