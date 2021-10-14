@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +23,7 @@ public class ContinentsController {
     }
 
     @GetMapping
-    public List<ContinentsDto> show() {
+    public List<ContinentsDto> findAll() {
         List<ContinentsDto> response = continentsService.getAll();
         System.out.println(response);
         return response;
@@ -42,14 +41,14 @@ public class ContinentsController {
         return null;
     }
 
-    @PostMapping("/create/{name}")
-    public List<ContinentsDto> create(@PathVariable("name") String name) {
+    @PostMapping
+    public List<ContinentsDto> create(@RequestParam("name") String name) {
         continentsService.create(new ContinentsDto(name));
         return continentsService.getAll();
     }
 
-    @DeleteMapping("/remove/{id}")
-    public List<ContinentsDto> remove(@PathVariable("id") Integer id) {
+    @DeleteMapping
+    public List<ContinentsDto> remove(@RequestParam("id") Integer id) {
         continentsService.delete(id);
         return continentsService.getAll();
     }

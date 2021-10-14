@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import me.givo.nationdbapiproject.model.Continents;
 
 @Setter
 @Getter
@@ -25,11 +24,10 @@ public class RegionsDto {
     @Size(max = 100)
     private String name;
 
-    private Continents continents;
+    private Integer continentId;
 
-    public RegionsDto(@NotBlank @Size(max = 100) String name, Continents continents) {
+    public RegionsDto(@NotBlank @Size(max = 100) String name) {
         this.name = name;
-        this.continents = continents;
     }
 
 }

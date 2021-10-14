@@ -2,15 +2,13 @@ package me.givo.nationdbapiproject.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.stereotype.Component;
 
 import me.givo.nationdbapiproject.dto.RegionsDto;
 
 @Component
 public interface IRegionsService {
-    public RegionsDto create(@Valid RegionsDto continentsDto);
+    public RegionsDto create(String regionName, String continentName);
 
     public List<RegionsDto> getAll();
 

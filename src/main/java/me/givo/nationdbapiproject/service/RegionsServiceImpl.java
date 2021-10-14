@@ -2,8 +2,6 @@ package me.givo.nationdbapiproject.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -17,28 +15,33 @@ import me.givo.nationdbapiproject.repository.IRegionsJpaRepository;
 @Validated
 public class RegionsServiceImpl implements IRegionsService {
 
-    private IContinentsJpaRepository IContinentsJpaRepository;
+    private IContinentsJpaRepository continentsJpaRepository;
     private IRegionsJpaRepository regionsJpaRepository;
     private ModelMapper modelMapper;
 
     public RegionsServiceImpl(IRegionsJpaRepository regionsJpaRepository,
             IContinentsJpaRepository continentsJpaRepository, ModelMapper modelMapper) {
-        this.IContinentsJpaRepository = continentsJpaRepository;
+        this.continentsJpaRepository = continentsJpaRepository;
         this.regionsJpaRepository = regionsJpaRepository;
         this.modelMapper = modelMapper;
     }
-
+   // @Valid RegionsDto regionsDto
     @Override
-    public RegionsDto create(@Valid RegionsDto regionsDto) {
+    public RegionsDto create(String regionName, String continentName) {
+        RegionsDto regionsDto = new RegionsDto(regionName);
         Regions regionsEntity = modelMapper.map(regionsDto, Regions.class);
+        regionsEntity.setContinents(continentsJpaRepository.findByName(continentName));
         regionsJpaRepository.save(regionsEntity);
-        return modelMapper.map(regionsEntity, RegionsDto.class);
+        regionsDto = modelMapper.map(regionsEntity, RegionsDto.class);
+        return regionsDto;
     }
 
     @Override
     public List<RegionsDto> getAll() {
         List<Regions> entity = regionsJpaRepository.findAll();
-        List<RegionsDto> dto = entity.stream().map(e -> modelMapper.map(e, RegionsDto.class)).toList();
+        List<RegionsDto> dto = entity.stream().map(e -> modelMapper.typeMap(Regions.class, RegionsDto.class)
+        .addMapping(r -> r.getContinents().getContinentId(), RegionsDto::setContinentId).map(e)).toList();
+        //List<RegionsDto> dto = entity.stream().map(e -> modelMapper.map(e, RegionsDto.class)).toList();
         return dto;
     }
 
