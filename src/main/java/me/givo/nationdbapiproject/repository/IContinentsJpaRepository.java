@@ -7,6 +7,7 @@ import me.givo.nationdbapiproject.model.Continents;
 
 @Repository
 public interface IContinentsJpaRepository extends JpaRepository<Continents, Integer> {
-    // select fields from countries where name='[param]'
     Continents findByName(String name);
+
+    Continents getById(Integer id);
 }

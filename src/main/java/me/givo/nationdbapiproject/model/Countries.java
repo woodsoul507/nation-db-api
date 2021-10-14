@@ -14,10 +14,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
+@NamedEntityGraph(name = "countries-graph", attributeNodes = { @NamedAttributeNode(value = "name"),
+        @NamedAttributeNode("area"), @NamedAttributeNode("nationalDay"), @NamedAttributeNode("countryCode2"),
+        @NamedAttributeNode("countryCode3"), @NamedAttributeNode("regions"),
+        @NamedAttributeNode(value = "countryLanguages", subgraph = "languages-subgraph"), }, subgraphs = {
+                @NamedSubgraph(name = "languages-subgraph", attributeNodes = {
+                        @NamedAttributeNode(value = "languages") }) })
 @Table(name = "countries")
 public class Countries {
 
@@ -45,7 +54,7 @@ public class Countries {
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     private Regions regions;
 
-    @OneToMany(mappedBy = "countries", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "countries", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<CountryLanguages> countryLanguages = new HashSet<CountryLanguages>();
 
     public Countries() {
