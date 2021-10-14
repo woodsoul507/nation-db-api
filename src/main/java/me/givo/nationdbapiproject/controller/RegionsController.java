@@ -23,8 +23,7 @@ public class RegionsController {
 
     @GetMapping
     public List<RegionsDto> findAll() {
-        List<RegionsDto> response = regionsService.getAll();
-        System.out.println(response);
+        List<RegionsDto> response = regionsService.findAll();
         return response;
     }
 
@@ -44,13 +43,13 @@ public class RegionsController {
     public List<RegionsDto> create(@RequestParam(name = "name") String name,
             @RequestParam(name = "continent") String continent) {
         regionsService.create(name, continent);
-        return regionsService.getAll();
+        return regionsService.findAll();
     }
 
     @DeleteMapping
     public List<RegionsDto> remove(@RequestParam("id") Integer id) {
         regionsService.delete(id);
-        return regionsService.getAll();
+        return regionsService.findAll();
     }
 
 }

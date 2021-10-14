@@ -1,7 +1,5 @@
 package me.givo.nationdbapiproject.dto;
 
-import java.math.BigDecimal;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -18,28 +16,17 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class CountriesDto {
-
+public class LanguagesDto {
     @EqualsAndHashCode.Include
-    private Integer countryId;
+    private Integer languageId;
 
     @NotBlank
     @Size(max = 50)
-    private String name;
+    private String language;
 
-    @NotBlank
-    private BigDecimal area;
-
-    private java.sql.Date nationalDay;
-
-    @NotBlank
-    @Size(max = 2)
-    private String countryCode2;
-
-    @NotBlank
-    @Size(max = 3)
-    private String countryCode3;
-
-    private Integer regionId;
-
+    public LanguagesDto(@NotBlank
+    @Size(max = 100) String language) {
+        this.language = language;
+    }
+    
 }

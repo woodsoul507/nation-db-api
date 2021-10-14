@@ -2,6 +2,8 @@ package me.givo.nationdbapiproject.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -25,11 +27,11 @@ public class RegionsServiceImpl implements IRegionsService {
         this.regionsJpaRepository = regionsJpaRepository;
         this.modelMapper = modelMapper;
     }
-   // @Valid RegionsDto regionsDto
+
     @Override
     public RegionsDto create(String regionName, String continentName) {
         RegionsDto regionsDto = new RegionsDto(regionName);
-        Regions regionsEntity = modelMapper.map(regionsDto, Regions.class);
+        Regions regionsEntity = modelMapper.map(validDto(regionsDto), Regions.class);
         regionsEntity.setContinents(continentsJpaRepository.findByName(continentName));
         regionsJpaRepository.save(regionsEntity);
         regionsDto = modelMapper.map(regionsEntity, RegionsDto.class);
@@ -37,11 +39,10 @@ public class RegionsServiceImpl implements IRegionsService {
     }
 
     @Override
-    public List<RegionsDto> getAll() {
+    public List<RegionsDto> findAll() {
         List<Regions> entity = regionsJpaRepository.findAll();
         List<RegionsDto> dto = entity.stream().map(e -> modelMapper.typeMap(Regions.class, RegionsDto.class)
         .addMapping(r -> r.getContinents().getContinentId(), RegionsDto::setContinentId).map(e)).toList();
-        //List<RegionsDto> dto = entity.stream().map(e -> modelMapper.map(e, RegionsDto.class)).toList();
         return dto;
     }
 
@@ -53,14 +54,21 @@ public class RegionsServiceImpl implements IRegionsService {
     @Override
     public RegionsDto findById(Integer id) {
         Regions entity = regionsJpaRepository.getById(id);
-        RegionsDto dto = modelMapper.map(entity, RegionsDto.class);
+        RegionsDto dto = modelMapper.typeMap(Regions.class, RegionsDto.class)
+        .addMapping(r -> r.getContinents().getContinentId(), RegionsDto::setContinentId).map(entity);
         return dto;
     }
 
     @Override
     public RegionsDto findByName(String name) {
         Regions entity = regionsJpaRepository.findByName(name);
-        RegionsDto dto = modelMapper.map(entity, RegionsDto.class);
+        RegionsDto dto = modelMapper.typeMap(Regions.class, RegionsDto.class)
+        .addMapping(r -> r.getContinents().getContinentId(), RegionsDto::setContinentId).map(entity);
+        return dto;
+    }
+
+    @Override
+    public RegionsDto validDto(@Valid RegionsDto dto) {
         return dto;
     }
 

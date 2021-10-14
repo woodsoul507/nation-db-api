@@ -24,7 +24,7 @@ public class ContinentsController {
 
     @GetMapping
     public List<ContinentsDto> findAll() {
-        List<ContinentsDto> response = continentsService.getAll();
+        List<ContinentsDto> response = continentsService.findAll();
         System.out.println(response);
         return response;
     }
@@ -44,13 +44,13 @@ public class ContinentsController {
     @PostMapping
     public List<ContinentsDto> create(@RequestParam("name") String name) {
         continentsService.create(new ContinentsDto(name));
-        return continentsService.getAll();
+        return continentsService.findAll();
     }
 
     @DeleteMapping
     public List<ContinentsDto> remove(@RequestParam("id") Integer id) {
         continentsService.delete(id);
-        return continentsService.getAll();
+        return continentsService.findAll();
     }
 
 }

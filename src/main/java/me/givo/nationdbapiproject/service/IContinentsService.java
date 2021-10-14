@@ -12,7 +12,7 @@ import me.givo.nationdbapiproject.dto.ContinentsDto;
 public interface IContinentsService {
     public ContinentsDto create(@Valid ContinentsDto continentsDto);
 
-    public List<ContinentsDto> getAll();
+    public List<ContinentsDto> findAll();
 
     public void delete(Integer id);
 

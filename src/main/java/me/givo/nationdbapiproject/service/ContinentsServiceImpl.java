@@ -44,7 +44,7 @@ public class ContinentsServiceImpl implements IContinentsService {
     }
 
     @Override
-    public List<ContinentsDto> getAll() {
+    public List<ContinentsDto> findAll() {
         List<Continents> entity = continentsJpaRepository.findAll();
         List<ContinentsDto> dto = entity.stream().map(e -> modelMapper.map(e, ContinentsDto.class)).toList();
         return dto;
