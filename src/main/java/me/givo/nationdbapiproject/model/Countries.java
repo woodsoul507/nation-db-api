@@ -70,6 +70,14 @@ public class Countries {
         this.countryCode3 = countryCode3;
     }
 
+    public Regions getRegions() {
+        return regions;
+    }
+
+    public void setRegions(Regions regions) {
+        this.regions = regions;
+    }
+
     public Integer getCountryId() {
         return countryId;
     }
