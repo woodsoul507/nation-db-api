@@ -11,7 +11,7 @@ import me.givo.nationdbapiproject.dto.CountryLanguagesDto;
 @Component
 public interface ICountryLanguagesService {
 
-    public CountryLanguagesDto create(Boolean official);
+    public CountryLanguagesDto create(String country, String language, Boolean official);
 
     public List<CountryLanguagesDto> findAll();
 

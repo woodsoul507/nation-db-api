@@ -9,34 +9,49 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import me.givo.nationdbapiproject.dto.CountryLanguagesDto;
+import me.givo.nationdbapiproject.model.CountryLanguages;
 import me.givo.nationdbapiproject.repository.ICountriesJpaRepository;
+import me.givo.nationdbapiproject.repository.ICountryLanguagesJpaRepository;
 import me.givo.nationdbapiproject.repository.ILanguagesJpaRepository;
 
 @Service
 @Validated
 public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
 
+    private ICountryLanguagesJpaRepository countryLanguagesJpaRepository;
     private ICountriesJpaRepository countriesJpaRepository;
     private ILanguagesJpaRepository languagesJpaRepository;
     private ModelMapper modelMapper;
 
-    public CountryLanguagesServiceImpl(ILanguagesJpaRepository languagesJpaRepository,
-            ICountriesJpaRepository countriesJpaRepository, ModelMapper modelMapper) {
+    public CountryLanguagesServiceImpl(ICountryLanguagesJpaRepository countryLanguagesJpaRepository,
+            ILanguagesJpaRepository languagesJpaRepository, ICountriesJpaRepository countriesJpaRepository,
+            ModelMapper modelMapper) {
+        this.countryLanguagesJpaRepository = countryLanguagesJpaRepository;
         this.countriesJpaRepository = countriesJpaRepository;
         this.languagesJpaRepository = languagesJpaRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public CountryLanguagesDto create(Boolean official) {
-        // TODO Auto-generated method stub
-        return null;
+    public CountryLanguagesDto create(String country, String language, Boolean official) {
+        CountryLanguagesDto countryLanguageDto = new CountryLanguagesDto(official == true ? 1 : 0);
+        CountryLanguages countryLanguageEntity = modelMapper.map(validDto(countryLanguageDto), CountryLanguages.class);
+        countryLanguageEntity.setCountries(countriesJpaRepository.findByName(country));
+        countryLanguageEntity.setLanguages(languagesJpaRepository.findByLanguage(language));
+        countryLanguagesJpaRepository.save(countryLanguageEntity);
+        countryLanguageDto = modelMapper.map(countryLanguageEntity, CountryLanguagesDto.class);
+        return countryLanguageDto;
     }
 
     @Override
     public List<CountryLanguagesDto> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+        List<CountryLanguages> entity = countryLanguagesJpaRepository.findAll();
+        List<CountryLanguagesDto> dto = entity.stream()
+                .map(e -> modelMapper.typeMap(CountryLanguages.class, CountryLanguagesDto.class)
+                        .addMappings(r -> r.map(CountryLanguages::getId, CountryLanguagesDto::setCountryId))
+                        .addMapping(r -> r.getCountries().getCountryId(), CountryLanguagesDto::setCountryId).map(e))
+                .toList();
+        return dto;
     }
 
     @Override
