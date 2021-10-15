@@ -33,7 +33,8 @@ public class CountriesServiceImpl implements ICountriesService {
     @Override
     public CountriesDto create(String name, BigDecimal area, Long nationalDay, String countryCode2, String countryCode3,
             String region) {
-        CountriesDto countryDto = new CountriesDto(name, area, new Date(nationalDay), countryCode2, countryCode3);
+        CountriesDto countryDto = nationalDay == null ? new CountriesDto(name, area, countryCode2, countryCode3)
+                : new CountriesDto(name, area, new Date(nationalDay), countryCode2, countryCode3);
         Countries countryEntity = modelMapper.map(validDto(countryDto), Countries.class);
         countryEntity.setRegions(regionsJpaRepository.findByName(region));
         countriesJpaRepository.save(countryEntity);
