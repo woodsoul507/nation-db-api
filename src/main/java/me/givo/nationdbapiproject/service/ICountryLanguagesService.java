@@ -17,9 +17,11 @@ public interface ICountryLanguagesService {
 
     public void delete(String country, String language);
 
-    public CountryLanguagesDto findById(Integer id);
+    public CountryLanguagesDto findById(String country, String language);
 
-    public CountryLanguagesDto findByName(String id);
+    public List<CountryLanguagesDto> findByCountry(String country);
+
+    public List<CountryLanguagesDto> findByLanguage(String language);
 
     public CountryLanguagesDto validDto(@Valid CountryLanguagesDto dto);
 

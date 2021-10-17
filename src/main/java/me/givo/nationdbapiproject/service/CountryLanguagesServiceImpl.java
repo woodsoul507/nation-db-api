@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import me.givo.nationdbapiproject.dto.CountryLanguagesDto;
+import me.givo.nationdbapiproject.model.Countries;
 import me.givo.nationdbapiproject.model.CountryLanguages;
+import me.givo.nationdbapiproject.model.CountryLanguagesId;
+import me.givo.nationdbapiproject.model.Languages;
 import me.givo.nationdbapiproject.repository.ICountriesJpaRepository;
 import me.givo.nationdbapiproject.repository.ICountryLanguagesJpaRepository;
 import me.givo.nationdbapiproject.repository.ILanguagesJpaRepository;
@@ -36,6 +39,8 @@ public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
     public CountryLanguagesDto create(String country, String language, Boolean official) {
         CountryLanguagesDto countryLanguageDto = new CountryLanguagesDto(official == true ? 1 : 0);
         CountryLanguages countryLanguageEntity = modelMapper.map(validDto(countryLanguageDto), CountryLanguages.class);
+        countryLanguageEntity.setId(new CountryLanguagesId(countriesJpaRepository.findByName(country).getCountryId(),
+                languagesJpaRepository.findByLanguage(language).getLanguageId()));
         countryLanguageEntity.setCountries(countriesJpaRepository.findByName(country));
         countryLanguageEntity.setLanguages(languagesJpaRepository.findByLanguage(language));
         countryLanguagesJpaRepository.save(countryLanguageEntity);
@@ -46,36 +51,48 @@ public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
     @Override
     public List<CountryLanguagesDto> findAll() {
         List<CountryLanguages> entity = countryLanguagesJpaRepository.findAll();
-        List<CountryLanguagesDto> dto = entity.stream()
-                .map(e -> modelMapper.typeMap(CountryLanguages.class, CountryLanguagesDto.class)
-                        .addMappings(r -> r.map(CountryLanguages::getId, CountryLanguagesDto::setCountryId))
-                        .addMapping(r -> r.getCountries().getCountryId(), CountryLanguagesDto::setCountryId).map(e))
+        List<CountryLanguagesDto> dto = entity.stream().map(e -> modelMapper.map(e, CountryLanguagesDto.class))
+                .toList();
+        return dto;
+    }
+
+    @Override
+    public CountryLanguagesDto findById(String country, String language) {
+        CountryLanguagesId id = new CountryLanguagesId(countriesJpaRepository.findByName(country).getCountryId(),
+                languagesJpaRepository.findByLanguage(language).getLanguageId());
+        CountryLanguages entity = countryLanguagesJpaRepository.getById(id);
+        CountryLanguagesDto dto = modelMapper.map(entity, CountryLanguagesDto.class);
+        return dto;
+    }
+
+    @Override
+    public List<CountryLanguagesDto> findByCountry(String country) {
+        Countries countryEntity = countriesJpaRepository.findByName(country);
+        List<CountryLanguages> entity = countryLanguagesJpaRepository.findByCountries(countryEntity);
+        List<CountryLanguagesDto> dto = entity.stream().map(e -> modelMapper.map(e, CountryLanguagesDto.class))
+                .toList();
+        return dto;
+    }
+
+    @Override
+    public List<CountryLanguagesDto> findByLanguage(String language) {
+        Languages languageEntity = languagesJpaRepository.findByLanguage(language);
+        List<CountryLanguages> entity = countryLanguagesJpaRepository.findByLanguages(languageEntity);
+        List<CountryLanguagesDto> dto = entity.stream().map(e -> modelMapper.map(e, CountryLanguagesDto.class))
                 .toList();
         return dto;
     }
 
     @Override
     public void delete(String country, String language) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public CountryLanguagesDto findById(Integer id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public CountryLanguagesDto findByName(String id) {
-        // TODO Auto-generated method stub
-        return null;
+        countryLanguagesJpaRepository
+                .deleteById(new CountryLanguagesId(countriesJpaRepository.findByName(country).getCountryId(),
+                        languagesJpaRepository.findByLanguage(language).getLanguageId()));
     }
 
     @Override
     public CountryLanguagesDto validDto(@Valid CountryLanguagesDto dto) {
-        // TODO Auto-generated method stub
-        return null;
+        return dto;
     }
 
 }

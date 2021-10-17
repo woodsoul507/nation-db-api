@@ -27,11 +27,6 @@ public class CountryStats {
     @Transient
     private Integer year;
 
-    // @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    // @MapsId("year")
-    // @JoinColumn(name = "year")
-    // private Integer year;
-
     @Column(name = "population", length = 11, nullable = true)
     private Long population;
 

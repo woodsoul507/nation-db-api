@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
@@ -66,8 +66,10 @@ public class CountryCrudOperationsJpaRepositoryTest {
 
                 countries.saveAllAndFlush(Arrays.asList(patu, xrama));
                 countryLanguages.saveAllAndFlush(Arrays.asList(cLPatuano, cLXramano));
-                countries.findByName("Patu").setCountryLanguages(Set.of(countryLanguages.findByLanguages(patuano)));
-                countries.findByName("Xrama").setCountryLanguages(Set.of(countryLanguages.findByLanguages(xramano)));
+                countries.findByName("Patu").setCountryLanguages(
+                                countryLanguages.findByLanguages(patuano).stream().collect(Collectors.toSet()));
+                countries.findByName("Xrama").setCountryLanguages(
+                                countryLanguages.findByLanguages(xramano).stream().collect(Collectors.toSet()));
 
                 assertEquals("Patu", countries.findByName("Patu").getName());
                 assertEquals("Xrama", countries.findByName("Xrama").getName());
