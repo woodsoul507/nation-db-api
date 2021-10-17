@@ -10,7 +10,7 @@ import me.givo.nationdbapiproject.model.Countries;
 
 @Repository
 public interface ICountriesJpaRepository extends JpaRepository<Countries, Integer> {
-    // select fields from countries where name='[param]'
+
     @EntityGraph(value = "countries-graph")
     Countries findByName(String name);
 

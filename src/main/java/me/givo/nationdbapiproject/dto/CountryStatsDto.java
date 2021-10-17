@@ -21,12 +21,21 @@ import lombok.ToString;
 public class CountryStatsDto {
 
     @EqualsAndHashCode.Include
-    private CountryStatsIdDto id;
+    private Integer countryId;
 
     @NotBlank
     @Size(max = 11)
+    @EqualsAndHashCode.Include
+    private Integer year;
+
+    @Size(max = 11)
     private Long population;
 
-    @NotBlank
     private BigDecimal gdp;
+
+    public CountryStatsDto(@Size(max = 11) Long population, BigDecimal gdp) {
+        this.population = population;
+        this.gdp = gdp;
+    }
+
 }
