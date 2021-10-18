@@ -17,12 +17,12 @@ public class CountryLanguages {
     @EmbeddedId
     private CountryLanguagesId id;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false, fetch = FetchType.LAZY)
     @MapsId("countryId")
     @JoinColumn(name = "country_id")
     private Countries countries;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false, fetch = FetchType.LAZY)
     @MapsId("languageId")
     @JoinColumn(name = "language_id")
     private Languages languages;

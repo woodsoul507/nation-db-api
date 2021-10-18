@@ -25,7 +25,6 @@ public class LanguagesController {
     @GetMapping
     public List<LanguagesDto> findAll() {
         List<LanguagesDto> response = languagesService.findAll();
-        System.out.println(response);
         return response;
     }
 

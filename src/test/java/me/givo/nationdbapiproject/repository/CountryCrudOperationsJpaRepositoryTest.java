@@ -51,20 +51,20 @@ public class CountryCrudOperationsJpaRepositoryTest {
         @Order(1)
         public void saveNewCountryRecord() {
 
-                continents.saveAndFlush(pulatina);
+                continents.save(pulatina);
 
                 assertEquals("Pulatina", continents.findByName("Pulatina").getName());
 
-                regions.saveAndFlush(mastil);
+                regions.save(mastil);
 
                 assertEquals("Mastil", regions.findByName("Mastil").getName());
 
-                languages.saveAllAndFlush(Arrays.asList(patuano, xramano));
+                languages.saveAll(Arrays.asList(patuano, xramano));
 
                 assertEquals("Patuano", languages.findByLanguage("Patuano").getLanguage());
                 assertEquals("Xramano", languages.findByLanguage("Xramano").getLanguage());
 
-                countries.saveAllAndFlush(Arrays.asList(patu, xrama));
+                countries.saveAll(Arrays.asList(patu, xrama));
                 countryLanguages.saveAllAndFlush(Arrays.asList(cLPatuano, cLXramano));
                 countries.findByName("Patu").setCountryLanguages(
                                 countryLanguages.findByLanguages(patuano).stream().collect(Collectors.toSet()));
@@ -86,10 +86,10 @@ public class CountryCrudOperationsJpaRepositoryTest {
                 countries.delete(countries.findByName("Xrama"));
                 assertEquals(null, countries.findByName("Xrama"));
 
-                regions.delete(regions.findByName("Mastil"));
+                regions.delete(mastil);
                 assertEquals(null, regions.findByName("Mastil"));
 
-                continents.delete(continents.findByName("Pulatina"));
+                continents.delete(pulatina);
                 assertEquals(null, regions.findByName("Pulatina"));
 
         }

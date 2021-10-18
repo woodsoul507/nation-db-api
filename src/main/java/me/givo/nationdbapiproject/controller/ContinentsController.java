@@ -25,7 +25,6 @@ public class ContinentsController {
     @GetMapping
     public List<ContinentsDto> findAll() {
         List<ContinentsDto> response = continentsService.findAll();
-        System.out.println(response);
         return response;
     }
 

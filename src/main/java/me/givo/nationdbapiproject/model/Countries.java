@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -54,8 +53,11 @@ public class Countries {
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     private Regions regions;
 
-    @OneToMany(mappedBy = "countries", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "countries", orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<CountryLanguages> countryLanguages = new HashSet<CountryLanguages>();
+
+    @OneToMany(mappedBy = "countries", orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<CountryStats> countryStats = new HashSet<CountryStats>();
 
     public Countries() {
     }

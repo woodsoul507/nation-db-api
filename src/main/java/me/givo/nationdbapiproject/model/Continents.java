@@ -1,10 +1,15 @@
 package me.givo.nationdbapiproject.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +23,9 @@ public class Continents {
 
     @Column(name = "name", length = 255, nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "continents", orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Regions> regions = new HashSet<Regions>();
 
     public Continents() {
     }

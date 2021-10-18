@@ -7,6 +7,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -31,6 +34,9 @@ public class CountriesServiceImpl implements ICountriesService {
     }
 
     @Override
+    @Caching(evict = { @CacheEvict(value = "findCountryByName", allEntries = true),
+            @CacheEvict(value = "findCountryById", allEntries = true),
+            @CacheEvict(value = "findAllCountries", allEntries = true) })
     public CountriesDto create(String name, BigDecimal area, Long nationalDay, String countryCode2, String countryCode3,
             String region) {
         CountriesDto countryDto = nationalDay == null ? new CountriesDto(name, area, countryCode2, countryCode3)
@@ -43,6 +49,7 @@ public class CountriesServiceImpl implements ICountriesService {
     }
 
     @Override
+    @Cacheable("findAllCountries")
     public List<CountriesDto> findAll() {
         List<Countries> entity = countriesJpaRepository.findAll();
         List<CountriesDto> dto = entity.stream().map(e -> modelMapper.typeMap(Countries.class, CountriesDto.class)
@@ -51,11 +58,15 @@ public class CountriesServiceImpl implements ICountriesService {
     }
 
     @Override
+    @Caching(evict = { @CacheEvict(value = "findCountryByName", allEntries = true),
+            @CacheEvict(value = "findCountryById", allEntries = true),
+            @CacheEvict(value = "findAllCountries", allEntries = true) })
     public void delete(Integer id) {
         countriesJpaRepository.deleteById(id);
     }
 
     @Override
+    @Cacheable("findCountryById")
     public CountriesDto findById(Integer id) {
         Countries entity = countriesJpaRepository.getById(id);
         CountriesDto dto = modelMapper.typeMap(Countries.class, CountriesDto.class)
@@ -64,6 +75,7 @@ public class CountriesServiceImpl implements ICountriesService {
     }
 
     @Override
+    @Cacheable("findCountryByName")
     public CountriesDto findByName(String name) {
         Countries entity = countriesJpaRepository.findByName(name);
         CountriesDto dto = modelMapper.typeMap(Countries.class, CountriesDto.class)

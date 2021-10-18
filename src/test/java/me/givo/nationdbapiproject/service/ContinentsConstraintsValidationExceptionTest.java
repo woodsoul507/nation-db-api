@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import me.givo.nationdbapiproject.dto.ContinentsDto;
+import me.givo.nationdbapiproject.model.Continents;
+import me.givo.nationdbapiproject.repository.IContinentsJpaRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -20,6 +22,9 @@ public class ContinentsConstraintsValidationExceptionTest {
 
     @Autowired
     private ContinentsServiceImpl continentsServiceImpl;
+
+    @Autowired
+    private IContinentsJpaRepository continentsJpaRepository;
 
     @Test
     public void constraintsValidationExceptionTest() {
@@ -40,5 +45,9 @@ public class ContinentsConstraintsValidationExceptionTest {
         assertNotNull(cDto);
         assertEquals("Pulatina", cDto.getName());
         assertNotNull(cDto.getContinentId());
+
+        Continents cEntity = continentsJpaRepository.findByName("Pulatina");
+
+        continentsServiceImpl.delete(cEntity.getContinentId());
     }
 }
