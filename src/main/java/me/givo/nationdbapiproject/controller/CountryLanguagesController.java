@@ -57,7 +57,7 @@ public class CountryLanguagesController {
     }
 
     @DeleteMapping
-    public List<CountryLanguagesDto> remove(@RequestParam(name = "country") String country,
+    public List<CountryLanguagesDto> delete(@RequestParam(name = "country") String country,
             @RequestParam(name = "language") String language) {
         countryLanguagesService.delete(country, language);
         return countryLanguagesService.findAll();

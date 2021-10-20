@@ -16,4 +16,10 @@ public interface ICountriesJpaRepository extends JpaRepository<Countries, Intege
 
     @EntityGraph(value = "countries-graph")
     List<Countries> findAll();
+
+    @EntityGraph(value = "countries-graph")
+    void deleteById(Integer id);
+
+    @EntityGraph(value = "countries-graph")
+    void deleteByName(String name);
 }

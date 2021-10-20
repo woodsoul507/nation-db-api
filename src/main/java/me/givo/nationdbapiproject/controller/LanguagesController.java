@@ -47,7 +47,7 @@ public class LanguagesController {
     }
 
     @DeleteMapping
-    public List<LanguagesDto> remove(@RequestParam("id") Integer id) {
+    public List<LanguagesDto> delete(@RequestParam("id") Integer id) {
         languagesService.delete(id);
         return languagesService.findAll();
     }

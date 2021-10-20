@@ -50,7 +50,7 @@ public class CountriesController {
     }
 
     @DeleteMapping
-    public List<CountriesDto> remove(@RequestParam("id") Integer id) {
+    public List<CountriesDto> delete(@RequestParam("id") Integer id) {
         countriesService.delete(id);
         return countriesService.findAll();
     }

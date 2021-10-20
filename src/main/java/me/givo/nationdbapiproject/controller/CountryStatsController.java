@@ -59,7 +59,7 @@ public class CountryStatsController {
     }
 
     @DeleteMapping
-    public List<CountryStatsDto> remove(@RequestParam(name = "country") String country,
+    public List<CountryStatsDto> delete(@RequestParam(name = "country") String country,
             @RequestParam(name = "year") Integer year) {
         countryStatsService.delete(country, year);
         return countryStatsService.findAll();

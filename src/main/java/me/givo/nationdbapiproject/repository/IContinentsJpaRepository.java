@@ -9,5 +9,4 @@ import me.givo.nationdbapiproject.model.Continents;
 public interface IContinentsJpaRepository extends JpaRepository<Continents, Integer> {
     Continents findByName(String name);
 
-    Continents getById(Integer id);
 }

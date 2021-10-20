@@ -34,6 +34,11 @@ public class Continents {
         this.name = name;
     }
 
+    public Continents(Integer continentId, String name) {
+        this.continentId = continentId;
+        this.name = name;
+    }
+
     public Integer getContinentId() {
         return continentId;
     }

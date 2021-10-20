@@ -47,7 +47,7 @@ public class RegionsController {
     }
 
     @DeleteMapping
-    public List<RegionsDto> remove(@RequestParam("id") Integer id) {
+    public List<RegionsDto> delete(@RequestParam("id") Integer id) {
         regionsService.delete(id);
         return regionsService.findAll();
     }
