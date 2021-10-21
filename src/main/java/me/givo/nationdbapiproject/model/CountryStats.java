@@ -30,7 +30,7 @@ public class CountryStats {
     @Column(name = "population", length = 11, nullable = true)
     private Long population;
 
-    @Column(name = "gdp", nullable = true)
+    @Column(name = "gdp", nullable = true, precision = 0, length = 15)
     private BigDecimal gdp;
 
     public CountryStats() {

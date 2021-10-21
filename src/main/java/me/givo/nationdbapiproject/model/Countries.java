@@ -37,7 +37,7 @@ public class Countries {
     @Column(name = "name", length = 50, nullable = true)
     private String name;
 
-    @Column(name = "area", nullable = false)
+    @Column(name = "area", nullable = false, precision = 2, length = 10)
     private BigDecimal area;
 
     @Column(name = "national_day", nullable = true)

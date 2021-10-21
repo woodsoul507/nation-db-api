@@ -15,7 +15,7 @@ public class RegionAreas {
     @Column(name = "region_name", length = 100, nullable = false)
     private String regionName;
 
-    @Column(name = "region_area", nullable = false)
+    @Column(name = "region_area", nullable = false, precision = 2, length = 15)
     private BigDecimal regionArea;
 
     public RegionAreas() {
