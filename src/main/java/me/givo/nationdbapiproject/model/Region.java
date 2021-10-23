@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "regions")
-public class Regions {
+public class Region {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,17 +26,17 @@ public class Regions {
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @ManyToOne(targetEntity = Continents.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Continent.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "continent_id", referencedColumnName = "continent_id")
-    private Continents continents;
+    private Continent continents;
 
     @OneToMany(mappedBy = "regions", orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Countries> regions = new HashSet<Countries>();
+    private Set<Country> regions = new HashSet<Country>();
 
-    public Regions() {
+    public Region() {
     }
 
-    public Regions(String name, Continents continents) {
+    public Region(String name, Continent continents) {
         this.name = name;
         this.continents = continents;
     }
@@ -57,11 +57,11 @@ public class Regions {
         this.name = name;
     }
 
-    public Continents getContinents() {
+    public Continent getContinents() {
         return continents;
     }
 
-    public void setContinents(Continents continents) {
+    public void setContinents(Continent continents) {
         this.continents = continents;
     }
 
@@ -88,7 +88,7 @@ public class Regions {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Regions other = (Regions) obj;
+        Region other = (Region) obj;
         if (continents == null) {
             if (other.continents != null)
                 return false;

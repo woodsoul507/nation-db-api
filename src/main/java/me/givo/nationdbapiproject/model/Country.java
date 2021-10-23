@@ -27,7 +27,7 @@ import javax.persistence.Table;
                 @NamedSubgraph(name = "languages-subgraph", attributeNodes = {
                         @NamedAttributeNode(value = "languages") }) })
 @Table(name = "countries")
-public class Countries {
+public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,27 +43,27 @@ public class Countries {
     @Column(name = "national_day", nullable = true)
     private java.sql.Date nationalDay;
 
-    @Column(name = "country_code2", length = 2, nullable = false)
+    @Column(name = "country_code2", length = 2, nullable = false, unique = true)
     private String countryCode2;
 
-    @Column(name = "country_code3", length = 3, nullable = false)
+    @Column(name = "country_code3", length = 3, nullable = false, unique = true)
     private String countryCode3;
 
-    @ManyToOne(targetEntity = Regions.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Region.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
-    private Regions regions;
+    private Region regions;
 
     @OneToMany(mappedBy = "countries", orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<CountryLanguages> countryLanguages = new HashSet<CountryLanguages>();
+    private Set<CountryLanguage> countryLanguages = new HashSet<CountryLanguage>();
 
     @OneToMany(mappedBy = "countries", orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<CountryStats> countryStats = new HashSet<CountryStats>();
 
-    public Countries() {
+    public Country() {
     }
 
-    public Countries(String name, BigDecimal area, Date nationalDay, String countryCode2, String countryCode3,
-            Regions regions) {
+    public Country(String name, BigDecimal area, Date nationalDay, String countryCode2, String countryCode3,
+            Region regions) {
         this.name = name;
         this.area = area;
         this.regions = regions;
@@ -72,11 +72,11 @@ public class Countries {
         this.countryCode3 = countryCode3;
     }
 
-    public Regions getRegions() {
+    public Region getRegions() {
         return regions;
     }
 
-    public void setRegions(Regions regions) {
+    public void setRegions(Region regions) {
         this.regions = regions;
     }
 
@@ -128,11 +128,11 @@ public class Countries {
         this.countryCode3 = countryCode3;
     }
 
-    public Set<CountryLanguages> getCountryLanguages() {
+    public Set<CountryLanguage> getCountryLanguages() {
         return countryLanguages;
     }
 
-    public void setCountryLanguages(Set<CountryLanguages> countryLanguages) {
+    public void setCountryLanguages(Set<CountryLanguage> countryLanguages) {
         this.countryLanguages.addAll(countryLanguages);
     }
 
@@ -166,7 +166,7 @@ public class Countries {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Countries other = (Countries) obj;
+        Country other = (Country) obj;
         if (area == null) {
             if (other.area != null)
                 return false;

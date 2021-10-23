@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "continents")
-public class Continents {
+public class Continent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,16 +25,16 @@ public class Continents {
     private String name;
 
     @OneToMany(mappedBy = "continents", orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Regions> regions = new HashSet<Regions>();
+    private Set<Region> regions = new HashSet<Region>();
 
-    public Continents() {
+    public Continent() {
     }
 
-    public Continents(String name) {
+    public Continent(String name) {
         this.name = name;
     }
 
-    public Continents(Integer continentId, String name) {
+    public Continent(Integer continentId, String name) {
         this.continentId = continentId;
         this.name = name;
     }
@@ -77,7 +77,7 @@ public class Continents {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Continents other = (Continents) obj;
+        Continent other = (Continent) obj;
         if (continentId == null) {
             if (other.continentId != null)
                 return false;

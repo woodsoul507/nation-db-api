@@ -6,16 +6,16 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import me.givo.nationdbapiproject.model.Countries;
+import me.givo.nationdbapiproject.model.Country;
 
 @Repository
-public interface ICountriesJpaRepository extends JpaRepository<Countries, Integer> {
+public interface ICountriesJpaRepository extends JpaRepository<Country, Integer> {
 
     @EntityGraph(value = "countries-graph")
-    Countries findByName(String name);
+    Country findByName(String name);
 
     @EntityGraph(value = "countries-graph")
-    List<Countries> findAll();
+    List<Country> findAll();
 
     @EntityGraph(value = "countries-graph")
     void deleteById(Integer id);

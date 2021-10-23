@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import me.givo.nationdbapiproject.dto.CountriesDto;
-import me.givo.nationdbapiproject.model.Countries;
+import me.givo.nationdbapiproject.model.Country;
 import me.givo.nationdbapiproject.repository.ICountriesJpaRepository;
 import me.givo.nationdbapiproject.repository.IRegionsJpaRepository;
 
@@ -41,7 +41,7 @@ public class CountriesServiceImpl implements ICountriesService {
             String region) {
         CountriesDto countryDto = nationalDay == null ? new CountriesDto(name, area, countryCode2, countryCode3)
                 : new CountriesDto(name, area, new Date(nationalDay), countryCode2, countryCode3);
-        Countries countryEntity = modelMapper.map(validDto(countryDto), Countries.class);
+        Country countryEntity = modelMapper.map(validDto(countryDto), Country.class);
         countryEntity.setRegions(regionsJpaRepository.findByName(region));
         countriesJpaRepository.save(countryEntity);
         countryDto = modelMapper.map(countryEntity, CountriesDto.class);
@@ -51,8 +51,8 @@ public class CountriesServiceImpl implements ICountriesService {
     @Override
     @Cacheable("findAllCountries")
     public List<CountriesDto> findAll() {
-        List<Countries> entity = countriesJpaRepository.findAll();
-        List<CountriesDto> dto = entity.stream().map(e -> modelMapper.typeMap(Countries.class, CountriesDto.class)
+        List<Country> entity = countriesJpaRepository.findAll();
+        List<CountriesDto> dto = entity.stream().map(e -> modelMapper.typeMap(Country.class, CountriesDto.class)
                 .addMapping(r -> r.getRegions().getRegionId(), CountriesDto::setRegionId).map(e)).toList();
         return dto;
     }
@@ -68,8 +68,8 @@ public class CountriesServiceImpl implements ICountriesService {
     @Override
     @Cacheable("findCountryById")
     public CountriesDto findById(Integer id) {
-        Countries entity = countriesJpaRepository.getById(id);
-        CountriesDto dto = modelMapper.typeMap(Countries.class, CountriesDto.class)
+        Country entity = countriesJpaRepository.getById(id);
+        CountriesDto dto = modelMapper.typeMap(Country.class, CountriesDto.class)
                 .addMapping(r -> r.getRegions().getRegionId(), CountriesDto::setRegionId).map(entity);
         return dto;
     }
@@ -77,8 +77,8 @@ public class CountriesServiceImpl implements ICountriesService {
     @Override
     @Cacheable("findCountryByName")
     public CountriesDto findByName(String name) {
-        Countries entity = countriesJpaRepository.findByName(name);
-        CountriesDto dto = modelMapper.typeMap(Countries.class, CountriesDto.class)
+        Country entity = countriesJpaRepository.findByName(name);
+        CountriesDto dto = modelMapper.typeMap(Country.class, CountriesDto.class)
                 .addMapping(r -> r.getRegions().getRegionId(), CountriesDto::setRegionId).map(entity);
         return dto;
     }

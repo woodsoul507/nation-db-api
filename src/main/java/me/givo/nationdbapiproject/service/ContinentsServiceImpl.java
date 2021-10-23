@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import me.givo.nationdbapiproject.dto.ContinentsDto;
-import me.givo.nationdbapiproject.model.Continents;
+import me.givo.nationdbapiproject.model.Continent;
 import me.givo.nationdbapiproject.repository.IContinentsJpaRepository;
 
 @Service
@@ -30,7 +30,7 @@ public class ContinentsServiceImpl implements IContinentsService {
             @CacheEvict(value = "findContinentById", allEntries = true),
             @CacheEvict(value = "findAllContinents", allEntries = true) })
     public ContinentsDto create(ContinentsDto continentsDto) {
-        Continents continentsEntity = modelMapper.map(continentsDto, Continents.class);
+        Continent continentsEntity = modelMapper.map(continentsDto, Continent.class);
         continentsJpaRepository.save(continentsEntity);
         return modelMapper.map(continentsEntity, ContinentsDto.class);
     }
@@ -38,7 +38,7 @@ public class ContinentsServiceImpl implements IContinentsService {
     @Override
     @Cacheable("findContinentByName")
     public ContinentsDto findByName(String name) {
-        Continents entity = continentsJpaRepository.findByName(name);
+        Continent entity = continentsJpaRepository.findByName(name);
         ContinentsDto dto = modelMapper.map(entity, ContinentsDto.class);
         return dto;
     }
@@ -46,7 +46,7 @@ public class ContinentsServiceImpl implements IContinentsService {
     @Override
     @Cacheable("findContinentById")
     public ContinentsDto findById(Integer id) {
-        Continents entity = continentsJpaRepository.getById(id);
+        Continent entity = continentsJpaRepository.getById(id);
         ContinentsDto dto = modelMapper.map(entity, ContinentsDto.class);
         return dto;
     }
@@ -54,7 +54,7 @@ public class ContinentsServiceImpl implements IContinentsService {
     @Override
     @Cacheable("findAllContinents")
     public List<ContinentsDto> findAll() {
-        List<Continents> entity = continentsJpaRepository.findAll();
+        List<Continent> entity = continentsJpaRepository.findAll();
         List<ContinentsDto> dto = entity.stream().map(e -> modelMapper.map(e, ContinentsDto.class)).toList();
         return dto;
     }

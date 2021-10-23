@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "region_areas")
-public class RegionAreas {
+public class RegionArea {
 
     @Id
     @Column(name = "region_name", length = 100, nullable = false)
@@ -18,10 +18,10 @@ public class RegionAreas {
     @Column(name = "region_area", nullable = false, precision = 2, length = 15)
     private BigDecimal regionArea;
 
-    public RegionAreas() {
+    public RegionArea() {
     }
 
-    public RegionAreas(String regionName, BigDecimal regionArea) {
+    public RegionArea(String regionName, BigDecimal regionArea) {
         this.regionName = regionName;
         this.regionArea = regionArea;
     }
@@ -64,7 +64,7 @@ public class RegionAreas {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        RegionAreas other = (RegionAreas) obj;
+        RegionArea other = (RegionArea) obj;
         if (regionArea == null) {
             if (other.regionArea != null)
                 return false;

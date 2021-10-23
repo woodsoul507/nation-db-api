@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "languages")
-public class Languages {
+public class Language {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +25,12 @@ public class Languages {
     private String language;
 
     @OneToMany(mappedBy = "languages", orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<CountryLanguages> countryLanguages = new HashSet<CountryLanguages>();
+    private Set<CountryLanguage> countryLanguages = new HashSet<CountryLanguage>();
 
-    public Languages() {
+    public Language() {
     }
 
-    public Languages(String language) {
+    public Language(String language) {
         this.language = language;
     }
 
@@ -50,11 +50,11 @@ public class Languages {
         this.language = language;
     }
 
-    public Set<CountryLanguages> getCountryLanguages() {
+    public Set<CountryLanguage> getCountryLanguages() {
         return countryLanguages;
     }
 
-    public void setCountryLanguages(Set<CountryLanguages> countryLanguages) {
+    public void setCountryLanguages(Set<CountryLanguage> countryLanguages) {
         this.countryLanguages.addAll(countryLanguages);
     }
 
@@ -64,7 +64,7 @@ public class Languages {
                 + languageId + "]";
     }
 
-    public Languages(Integer languageId, String language, Set<CountryLanguages> countryLanguages) {
+    public Language(Integer languageId, String language, Set<CountryLanguage> countryLanguages) {
         this.languageId = languageId;
         this.language = language;
         this.countryLanguages = countryLanguages;

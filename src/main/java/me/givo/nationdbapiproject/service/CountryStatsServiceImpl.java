@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import me.givo.nationdbapiproject.dto.CountryStatsDto;
-import me.givo.nationdbapiproject.model.Countries;
+import me.givo.nationdbapiproject.model.Country;
 import me.givo.nationdbapiproject.model.CountryStats;
 import me.givo.nationdbapiproject.model.CountryStatsId;
 import me.givo.nationdbapiproject.repository.ICountriesJpaRepository;
@@ -65,7 +65,7 @@ public class CountryStatsServiceImpl implements ICountryStatsService {
 
     @Override
     public List<CountryStatsDto> findByCountry(String country) {
-        Countries countryEntity = countriesJpaRepository.findByName(country);
+        Country countryEntity = countriesJpaRepository.findByName(country);
         List<CountryStats> entity = countryStatsJpaRepository.findByCountries(countryEntity);
         List<CountryStatsDto> dto = entity.stream().map(e -> modelMapper.map(e, CountryStatsDto.class)).toList();
         return dto;

@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import me.givo.nationdbapiproject.dto.ContinentsDto;
-import me.givo.nationdbapiproject.model.Continents;
+import me.givo.nationdbapiproject.model.Continent;
 import me.givo.nationdbapiproject.repository.IContinentsJpaRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,7 +34,7 @@ public class ContinentsServiceImplTest {
     void testCreate() {
         // Given
         ContinentsDto continentDto = new ContinentsDto(1, "Asia");
-        Continents continentEntity = new Continents(1, "Asia");
+        Continent continentEntity = new Continent(1, "Asia");
         // When
         underTest.create(continentDto);
         // Then

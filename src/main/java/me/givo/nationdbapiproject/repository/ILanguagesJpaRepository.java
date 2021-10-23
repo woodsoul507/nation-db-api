@@ -3,11 +3,11 @@ package me.givo.nationdbapiproject.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import me.givo.nationdbapiproject.model.Languages;
+import me.givo.nationdbapiproject.model.Language;
 
 @Repository
-public interface ILanguagesJpaRepository extends JpaRepository<Languages, Integer> {
+public interface ILanguagesJpaRepository extends JpaRepository<Language, Integer> {
 
-    Languages findByLanguage(String language);
+    Language findByLanguage(String language);
 
 }

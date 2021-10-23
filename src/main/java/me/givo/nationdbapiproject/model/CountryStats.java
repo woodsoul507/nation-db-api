@@ -22,7 +22,7 @@ public class CountryStats {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @MapsId("countryId")
     @JoinColumn(name = "country_id")
-    private Countries countries;
+    private Country countries;
 
     @Transient
     private Integer year;
@@ -36,7 +36,7 @@ public class CountryStats {
     public CountryStats() {
     }
 
-    public CountryStats(Countries countries, Integer year, Long population, BigDecimal gdp) {
+    public CountryStats(Country countries, Integer year, Long population, BigDecimal gdp) {
         this.id = new CountryStatsId(countries.getCountryId(), year);
         this.countries = countries;
         this.year = year;
@@ -52,11 +52,11 @@ public class CountryStats {
         this.id = id;
     }
 
-    public Countries getCountries() {
+    public Country getCountries() {
         return countries;
     }
 
-    public void setCountries(Countries countries) {
+    public void setCountries(Country countries) {
         this.countries = countries;
     }
 

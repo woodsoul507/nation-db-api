@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class CountryLanguagesId implements Serializable {
+public class CountryLanguageId implements Serializable {
 
     @Column(name = "country_id")
     private Integer countryId;
@@ -14,10 +14,10 @@ public class CountryLanguagesId implements Serializable {
     @Column(name = "language_id")
     private Integer languageId;
 
-    public CountryLanguagesId() {
+    public CountryLanguageId() {
     }
 
-    public CountryLanguagesId(Integer countryId, Integer languageId) {
+    public CountryLanguageId(Integer countryId, Integer languageId) {
         this.countryId = countryId;
         this.languageId = languageId;
     }
@@ -60,7 +60,7 @@ public class CountryLanguagesId implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        CountryLanguagesId other = (CountryLanguagesId) obj;
+        CountryLanguageId other = (CountryLanguageId) obj;
         if (countryId == null) {
             if (other.countryId != null)
                 return false;
