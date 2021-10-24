@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import me.givo.nationdbapiproject.dto.CountriesDto;
+import me.givo.nationdbapiproject.dto.CountryDto;
 import me.givo.nationdbapiproject.service.CountriesServiceImpl;
 
 @RestController
@@ -23,14 +23,14 @@ public class CountriesController {
     }
 
     @GetMapping
-    public List<CountriesDto> findAll() {
-        List<CountriesDto> response = countriesService.findAll();
+    public List<CountryDto> findAll() {
+        List<CountryDto> response = countriesService.findAll();
         return response;
     }
 
     @GetMapping("/findBy")
-    public CountriesDto find(@RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "id", required = false) Integer id) {
+    public CountryDto find(@RequestParam(name = "name", required = false) String name,
+                           @RequestParam(name = "id", required = false) Integer id) {
         if (name == null && id != null) {
             return countriesService.findById(id);
         }
@@ -41,16 +41,16 @@ public class CountriesController {
     }
 
     @PostMapping
-    public List<CountriesDto> create(@RequestParam(name = "name") String name,
-            @RequestParam(name = "area") BigDecimal area, @RequestParam(name = "date", required = false) Long date,
-            @RequestParam(name = "code2") String code2, @RequestParam(name = "code3") String code3,
-            @RequestParam(name = "region") String region) {
+    public List<CountryDto> create(@RequestParam(name = "name") String name,
+                                   @RequestParam(name = "area") BigDecimal area, @RequestParam(name = "date", required = false) Long date,
+                                   @RequestParam(name = "code2") String code2, @RequestParam(name = "code3") String code3,
+                                   @RequestParam(name = "region") String region) {
         countriesService.create(name, area, date, code2, code3, region);
         return countriesService.findAll();
     }
 
     @DeleteMapping
-    public List<CountriesDto> delete(@RequestParam("id") Integer id) {
+    public List<CountryDto> delete(@RequestParam("id") Integer id) {
         countriesService.delete(id);
         return countriesService.findAll();
     }

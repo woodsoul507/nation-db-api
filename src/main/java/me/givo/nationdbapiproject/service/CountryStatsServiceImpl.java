@@ -6,6 +6,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,9 +23,9 @@ import me.givo.nationdbapiproject.repository.ICountryStatsJpaRepository;
 @Validated
 public class CountryStatsServiceImpl implements ICountryStatsService {
 
-    private ICountryStatsJpaRepository countryStatsJpaRepository;
-    private ICountriesJpaRepository countriesJpaRepository;
-    private ModelMapper modelMapper;
+    private final ICountryStatsJpaRepository countryStatsJpaRepository;
+    private final ICountriesJpaRepository countriesJpaRepository;
+    private final ModelMapper modelMapper;
 
     public CountryStatsServiceImpl(ICountryStatsJpaRepository countryStatsJpaRepository,
             ICountriesJpaRepository countriesJpaRepository, ModelMapper modelMapper) {
@@ -32,6 +35,10 @@ public class CountryStatsServiceImpl implements ICountryStatsService {
     }
 
     @Override
+    @Caching(evict = { @CacheEvict(value = "findAllCountryStats", allEntries = true),
+            @CacheEvict(value = "findCountryStatsById", allEntries = true),
+            @CacheEvict(value = "findCountryStatsByCountry", allEntries = true),
+            @CacheEvict(value = "findCountryStatsByYear", allEntries = true) })
     public CountryStatsDto create(String country, Integer year, Long population, BigDecimal gdp) {
         CountryStatsDto countryStatsDto = new CountryStatsDto(population, gdp);
         CountryStats countryStatsEntity = modelMapper.map(validDto(countryStatsDto), CountryStats.class);
@@ -43,6 +50,7 @@ public class CountryStatsServiceImpl implements ICountryStatsService {
     }
 
     @Override
+    @Cacheable("findAllCountryStats")
     public List<CountryStatsDto> findAll() {
         List<CountryStats> entity = countryStatsJpaRepository.findAll();
         List<CountryStatsDto> dto = entity.stream().map(e -> modelMapper.map(e, CountryStatsDto.class)).toList();
@@ -50,12 +58,7 @@ public class CountryStatsServiceImpl implements ICountryStatsService {
     }
 
     @Override
-    public void delete(String country, Integer year) {
-        countryStatsJpaRepository
-                .deleteById(new CountryStatsId(countriesJpaRepository.findByName(country).getCountryId(), year));
-    }
-
-    @Override
+    @Cacheable("findCountryStatsById")
     public CountryStatsDto findById(String country, Integer year) {
         CountryStatsId id = new CountryStatsId(countriesJpaRepository.findByName(country).getCountryId(), year);
         CountryStats entity = countryStatsJpaRepository.getById(id);
@@ -64,6 +67,7 @@ public class CountryStatsServiceImpl implements ICountryStatsService {
     }
 
     @Override
+    @Cacheable("findCountryStatsByCountry")
     public List<CountryStatsDto> findByCountry(String country) {
         Country countryEntity = countriesJpaRepository.findByName(country);
         List<CountryStats> entity = countryStatsJpaRepository.findByCountries(countryEntity);
@@ -72,11 +76,22 @@ public class CountryStatsServiceImpl implements ICountryStatsService {
     }
 
     @Override
+    @Cacheable("findCountryStatsByYear")
     public List<CountryStatsDto> findByYear(Integer year) {
         List<CountryStats> entity = countryStatsJpaRepository.findAll().stream()
                 .filter(e -> e.getId().getYear().intValue() == year).toList();
         List<CountryStatsDto> dto = entity.stream().map(e -> modelMapper.map(e, CountryStatsDto.class)).toList();
         return dto;
+    }
+
+    @Override
+    @Caching(evict = { @CacheEvict(value = "findAllCountryStats", allEntries = true),
+            @CacheEvict(value = "findCountryStatsById", allEntries = true),
+            @CacheEvict(value = "findCountryStatsByCountry", allEntries = true),
+            @CacheEvict(value = "findCountryStatsByYear", allEntries = true) })
+    public void delete(String country, Integer year) {
+        countryStatsJpaRepository
+                .deleteById(new CountryStatsId(countriesJpaRepository.findByName(country).getCountryId(), year));
     }
 
     @Override

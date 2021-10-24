@@ -7,22 +7,22 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Component;
 
-import me.givo.nationdbapiproject.dto.CountriesDto;
+import me.givo.nationdbapiproject.dto.CountryDto;
 
 @Component
 public interface ICountriesService {
 
-    public CountriesDto create(String name, BigDecimal area, Long nationalDay, String countryCode2, String countryCode3,
-            String region);
+    public CountryDto create(String name, BigDecimal area, Long nationalDay, String countryCode2, String countryCode3,
+                             String region);
 
-    public List<CountriesDto> findAll();
+    public List<CountryDto> findAll();
 
     public void delete(Integer id);
 
-    public CountriesDto findById(Integer id);
+    public CountryDto findById(Integer id);
 
-    public CountriesDto findByName(String name);
+    public CountryDto findByName(String name);
 
-    public CountriesDto validDto(@Valid CountriesDto dto);
+    public CountryDto validDto(@Valid CountryDto dto);
 
 }

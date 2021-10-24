@@ -6,17 +6,19 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Component;
 
-import me.givo.nationdbapiproject.dto.ContinentsDto;
+import me.givo.nationdbapiproject.dto.ContinentDto;
 
 @Component
 public interface IContinentsService {
-    public ContinentsDto create(@Valid ContinentsDto continentsDto);
+    public ContinentDto create(String name);
 
-    public List<ContinentsDto> findAll();
+    public List<ContinentDto> findAll();
 
     public void delete(Integer id);
 
-    public ContinentsDto findById(Integer id);
+    public ContinentDto findById(Integer id);
 
-    public ContinentsDto findByName(String name);
+    public ContinentDto findByName(String name);
+
+    ContinentDto validDto(@Valid ContinentDto dto);
 }

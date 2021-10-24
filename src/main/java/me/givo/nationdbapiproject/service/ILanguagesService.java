@@ -6,22 +6,22 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Component;
 
-import me.givo.nationdbapiproject.dto.LanguagesDto;
+import me.givo.nationdbapiproject.dto.LanguageDto;
 
 @Component
 public interface ILanguagesService {
 
-    public LanguagesDto create(@Valid LanguagesDto languagesDto);
+    public LanguageDto create(@Valid LanguageDto languageDto);
 
-    public List<LanguagesDto> findAll();
+    public List<LanguageDto> findAll();
 
     public void delete(Integer id);
 
-    public LanguagesDto findById(Integer id);
+    public LanguageDto findById(Integer id);
 
-    public LanguagesDto findByName(String name);
+    public LanguageDto findByName(String name);
 
-    public LanguagesDto validDto(@Valid LanguagesDto dto);
+    public LanguageDto validDto(@Valid LanguageDto dto);
 
 
 

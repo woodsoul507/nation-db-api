@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import me.givo.nationdbapiproject.dto.LanguagesDto;
+import me.givo.nationdbapiproject.dto.LanguageDto;
 import me.givo.nationdbapiproject.service.LanguagesServiceImpl;
 
 @RestController
@@ -23,14 +23,14 @@ public class LanguagesController {
     }
 
     @GetMapping
-    public List<LanguagesDto> findAll() {
-        List<LanguagesDto> response = languagesService.findAll();
+    public List<LanguageDto> findAll() {
+        List<LanguageDto> response = languagesService.findAll();
         return response;
     }
 
     @GetMapping("/findBy")
-    public LanguagesDto find(@RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "id", required = false) Integer id) {
+    public LanguageDto find(@RequestParam(name = "name", required = false) String name,
+                            @RequestParam(name = "id", required = false) Integer id) {
         if (name == null && id != null) {
             return languagesService.findById(id);
         }
@@ -41,13 +41,13 @@ public class LanguagesController {
     }
 
     @PostMapping
-    public List<LanguagesDto> create(@RequestParam("name") String name) {
-        languagesService.create(new LanguagesDto(name));
+    public List<LanguageDto> create(@RequestParam("name") String name) {
+        languagesService.create(new LanguageDto(name));
         return languagesService.findAll();
     }
 
     @DeleteMapping
-    public List<LanguagesDto> delete(@RequestParam("id") Integer id) {
+    public List<LanguageDto> delete(@RequestParam("id") Integer id) {
         languagesService.delete(id);
         return languagesService.findAll();
     }

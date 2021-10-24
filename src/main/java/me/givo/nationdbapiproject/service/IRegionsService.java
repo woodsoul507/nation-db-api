@@ -6,20 +6,20 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Component;
 
-import me.givo.nationdbapiproject.dto.RegionsDto;
+import me.givo.nationdbapiproject.dto.RegionDto;
 
 @Component
 public interface IRegionsService {
-    public RegionsDto create(String regionName, String continentName);
+    public RegionDto create(String regionName, String continentName);
 
-    public List<RegionsDto> findAll();
+    public List<RegionDto> findAll();
 
     public void delete(Integer id);
 
-    public RegionsDto findById(Integer id);
+    public RegionDto findById(Integer id);
 
-    public RegionsDto findByName(String name);
+    public RegionDto findByName(String name);
 
-    public RegionsDto validDto(@Valid RegionsDto dto);
+    public RegionDto validDto(@Valid RegionDto dto);
 
 }

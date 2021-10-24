@@ -16,17 +16,16 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class LanguagesDto {
+public class ContinentDto {
     @EqualsAndHashCode.Include
-    private Integer languageId;
+    private Integer continentId;
 
     @NotBlank
-    @Size(max = 50)
-    private String language;
+    @Size(max = 255)
+    private String name;
 
-    public LanguagesDto(@NotBlank
-    @Size(max = 100) String language) {
-        this.language = language;
+    public ContinentDto(String name) {
+        this.name = name;
     }
-    
+
 }

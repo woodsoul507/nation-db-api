@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -21,10 +24,10 @@ import me.givo.nationdbapiproject.repository.ILanguagesJpaRepository;
 @Validated
 public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
 
-    private ICountryLanguagesJpaRepository countryLanguagesJpaRepository;
-    private ICountriesJpaRepository countriesJpaRepository;
-    private ILanguagesJpaRepository languagesJpaRepository;
-    private ModelMapper modelMapper;
+    private final ICountryLanguagesJpaRepository countryLanguagesJpaRepository;
+    private final ICountriesJpaRepository countriesJpaRepository;
+    private final ILanguagesJpaRepository languagesJpaRepository;
+    private final ModelMapper modelMapper;
 
     public CountryLanguagesServiceImpl(ICountryLanguagesJpaRepository countryLanguagesJpaRepository,
             ILanguagesJpaRepository languagesJpaRepository, ICountriesJpaRepository countriesJpaRepository,
@@ -36,6 +39,10 @@ public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
     }
 
     @Override
+    @Caching(evict = { @CacheEvict(value = "findAllCountryLanguages", allEntries = true),
+            @CacheEvict(value = "findCountryLanguagesById", allEntries = true),
+            @CacheEvict(value = "findCountryLanguagesByCountry", allEntries = true),
+            @CacheEvict(value = "findCountryLanguagesByLanguage", allEntries = true) })
     public CountryLanguagesDto create(String country, String language, Boolean official) {
         CountryLanguagesDto countryLanguageDto = new CountryLanguagesDto(official == true ? 1 : 0);
         CountryLanguage countryLanguageEntity = modelMapper.map(validDto(countryLanguageDto), CountryLanguage.class);
@@ -49,6 +56,7 @@ public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
     }
 
     @Override
+    @Cacheable("findAllCountryLanguages")
     public List<CountryLanguagesDto> findAll() {
         List<CountryLanguage> entity = countryLanguagesJpaRepository.findAll();
         List<CountryLanguagesDto> dto = entity.stream().map(e -> modelMapper.map(e, CountryLanguagesDto.class))
@@ -57,6 +65,7 @@ public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
     }
 
     @Override
+    @Cacheable("findCountryLanguagesById")
     public CountryLanguagesDto findById(String country, String language) {
         CountryLanguageId id = new CountryLanguageId(countriesJpaRepository.findByName(country).getCountryId(),
                 languagesJpaRepository.findByLanguage(language).getLanguageId());
@@ -66,6 +75,7 @@ public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
     }
 
     @Override
+    @Cacheable("findCountryLanguagesByCountry")
     public List<CountryLanguagesDto> findByCountry(String country) {
         Country countryEntity = countriesJpaRepository.findByName(country);
         List<CountryLanguage> entity = countryLanguagesJpaRepository.findByCountries(countryEntity);
@@ -75,6 +85,7 @@ public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
     }
 
     @Override
+    @Cacheable("findCountryLanguagesByLanguage")
     public List<CountryLanguagesDto> findByLanguage(String language) {
         Language languageEntity = languagesJpaRepository.findByLanguage(language);
         List<CountryLanguage> entity = countryLanguagesJpaRepository.findByLanguages(languageEntity);
@@ -84,6 +95,10 @@ public class CountryLanguagesServiceImpl implements ICountryLanguagesService {
     }
 
     @Override
+    @Caching(evict = { @CacheEvict(value = "findAllCountryLanguages", allEntries = true),
+            @CacheEvict(value = "findCountryLanguagesById", allEntries = true),
+            @CacheEvict(value = "findCountryLanguagesByCountry", allEntries = true),
+            @CacheEvict(value = "findCountryLanguagesByLanguage", allEntries = true) })
     public void delete(String country, String language) {
         countryLanguagesJpaRepository
                 .deleteById(new CountryLanguageId(countriesJpaRepository.findByName(country).getCountryId(),

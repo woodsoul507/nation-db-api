@@ -5,10 +5,13 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import me.givo.nationdbapiproject.dto.LanguagesDto;
+import me.givo.nationdbapiproject.dto.LanguageDto;
 import me.givo.nationdbapiproject.model.Language;
 import me.givo.nationdbapiproject.repository.ILanguagesJpaRepository;
 
@@ -16,8 +19,8 @@ import me.givo.nationdbapiproject.repository.ILanguagesJpaRepository;
 @Validated
 public class LanguagesServiceImpl implements ILanguagesService {
 
-    private ILanguagesJpaRepository languagesJpaRepository;
-    private ModelMapper modelMapper;
+    private final ILanguagesJpaRepository languagesJpaRepository;
+    private final ModelMapper modelMapper;
 
     public LanguagesServiceImpl(ILanguagesJpaRepository languagesJpaRepository, ModelMapper modelMapper) {
         this.languagesJpaRepository = languagesJpaRepository;
@@ -25,40 +28,49 @@ public class LanguagesServiceImpl implements ILanguagesService {
     }
 
     @Override
-    public LanguagesDto create(LanguagesDto languagesDto) {
-        Language languagesEntity = modelMapper.map(languagesDto, Language.class);
+    @Caching(evict = { @CacheEvict(value = "findAllLanguages", allEntries = true),
+            @CacheEvict(value = "findLanguageById", allEntries = true),
+            @CacheEvict(value = "findLanguageByName", allEntries = true) })
+    public LanguageDto create(LanguageDto languageDto) {
+        Language languagesEntity = modelMapper.map(languageDto, Language.class);
         languagesJpaRepository.save(languagesEntity);
-        return modelMapper.map(languagesEntity, LanguagesDto.class);
+        return modelMapper.map(languagesEntity, LanguageDto.class);
     }
 
     @Override
-    public List<LanguagesDto> findAll() {
+    @Cacheable("findAllLanguages")
+    public List<LanguageDto> findAll() {
         List<Language> entity = languagesJpaRepository.findAll();
-        List<LanguagesDto> dto = entity.stream().map(e -> modelMapper.map(e, LanguagesDto.class)).toList();
+        List<LanguageDto> dto = entity.stream().map(e -> modelMapper.map(e, LanguageDto.class)).toList();
         return dto;
     }
 
     @Override
+    @Cacheable("findLanguageById")
+    public LanguageDto findById(Integer id) {
+        Language entity = languagesJpaRepository.getById(id);
+        LanguageDto dto = modelMapper.map(entity, LanguageDto.class);
+        return dto;
+    }
+
+    @Override
+    @Cacheable("findLanguageByName")
+    public LanguageDto findByName(String name) {
+        Language entity = languagesJpaRepository.findByLanguage(name);
+        LanguageDto dto = modelMapper.map(entity, LanguageDto.class);
+        return dto;
+    }
+
+    @Override
+    @Caching(evict = { @CacheEvict(value = "findAllLanguages", allEntries = true),
+            @CacheEvict(value = "findLanguageById", allEntries = true),
+            @CacheEvict(value = "findLanguageByName", allEntries = true) })
     public void delete(Integer id) {
         languagesJpaRepository.deleteById(id);
     }
 
     @Override
-    public LanguagesDto findById(Integer id) {
-        Language entity = languagesJpaRepository.getById(id);
-        LanguagesDto dto = modelMapper.map(entity, LanguagesDto.class);
-        return dto;
-    }
-
-    @Override
-    public LanguagesDto findByName(String name) {
-        Language entity = languagesJpaRepository.findByLanguage(name);
-        LanguagesDto dto = modelMapper.map(entity, LanguagesDto.class);
-        return dto;
-    }
-
-    @Override
-    public LanguagesDto validDto(@Valid LanguagesDto dto) {
+    public LanguageDto validDto(@Valid LanguageDto dto) {
         return dto;
     }
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import me.givo.nationdbapiproject.dto.RegionsDto;
+import me.givo.nationdbapiproject.dto.RegionDto;
 import me.givo.nationdbapiproject.service.RegionsServiceImpl;
 
 @RestController
@@ -22,14 +22,14 @@ public class RegionsController {
     }
 
     @GetMapping
-    public List<RegionsDto> findAll() {
-        List<RegionsDto> response = regionsService.findAll();
+    public List<RegionDto> findAll() {
+        List<RegionDto> response = regionsService.findAll();
         return response;
     }
 
     @GetMapping("/findBy")
-    public RegionsDto find(@RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "id", required = false) Integer id) {
+    public RegionDto find(@RequestParam(name = "name", required = false) String name,
+                          @RequestParam(name = "id", required = false) Integer id) {
         if (name == null && id != null) {
             return regionsService.findById(id);
         }
@@ -40,14 +40,14 @@ public class RegionsController {
     }
 
     @PostMapping
-    public List<RegionsDto> create(@RequestParam(name = "name") String name,
-            @RequestParam(name = "continent") String continent) {
+    public List<RegionDto> create(@RequestParam(name = "name") String name,
+                                  @RequestParam(name = "continent") String continent) {
         regionsService.create(name, continent);
         return regionsService.findAll();
     }
 
     @DeleteMapping
-    public List<RegionsDto> delete(@RequestParam("id") Integer id) {
+    public List<RegionDto> delete(@RequestParam("id") Integer id) {
         regionsService.delete(id);
         return regionsService.findAll();
     }

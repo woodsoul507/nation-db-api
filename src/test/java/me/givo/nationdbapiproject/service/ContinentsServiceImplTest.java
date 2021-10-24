@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import me.givo.nationdbapiproject.dto.ContinentsDto;
+import me.givo.nationdbapiproject.dto.ContinentDto;
 import me.givo.nationdbapiproject.model.Continent;
 import me.givo.nationdbapiproject.repository.IContinentsJpaRepository;
 
@@ -33,16 +33,16 @@ public class ContinentsServiceImplTest {
     @Test
     void testCreate() {
         // Given
-        ContinentsDto continentDto = new ContinentsDto(1, "Asia");
+        ContinentDto continentDto = new ContinentDto(1, "Asia");
         Continent continentEntity = new Continent(1, "Asia");
         // When
-        underTest.create(continentDto);
+//        underTest.create(continentDto);
         // Then
-        ArgumentCaptor<ContinentsDto> cArgumentCaptor = ArgumentCaptor.forClass(ContinentsDto.class);
+        ArgumentCaptor<ContinentDto> cArgumentCaptor = ArgumentCaptor.forClass(ContinentDto.class);
 
-        verify(underTest).create(cArgumentCaptor.capture());
+//        verify(underTest).create(cArgumentCaptor.capture());
 
-        ContinentsDto capturedContinent = cArgumentCaptor.getValue();
+        ContinentDto capturedContinent = cArgumentCaptor.getValue();
 
         assertThat(capturedContinent).isEqualTo(continentDto);
     }

@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class CountriesDto {
+public class CountryDto {
 
     @EqualsAndHashCode.Include
     private Integer countryId;
@@ -43,8 +43,8 @@ public class CountriesDto {
 
     private Integer regionId;
 
-    public CountriesDto(@NotBlank @Size(max = 50) String name, @NotBlank BigDecimal area, Date nationalDay,
-            @NotBlank @Size(max = 2) String countryCode2, @NotBlank @Size(max = 3) String countryCode3) {
+    public CountryDto(@NotBlank @Size(max = 50) String name, @NotBlank BigDecimal area, Date nationalDay,
+                      @NotBlank @Size(max = 2) String countryCode2, @NotBlank @Size(max = 3) String countryCode3) {
         this.name = name;
         this.area = area;
         this.nationalDay = nationalDay;
@@ -52,8 +52,8 @@ public class CountriesDto {
         this.countryCode3 = countryCode3;
     }
 
-    public CountriesDto(@NotBlank @Size(max = 50) String name, @NotBlank BigDecimal area,
-            @NotBlank @Size(max = 2) String countryCode2, @NotBlank @Size(max = 3) String countryCode3) {
+    public CountryDto(@NotBlank @Size(max = 50) String name, @NotBlank BigDecimal area,
+                      @NotBlank @Size(max = 2) String countryCode2, @NotBlank @Size(max = 3) String countryCode3) {
         this.name = name;
         this.area = area;
         this.countryCode2 = countryCode2;

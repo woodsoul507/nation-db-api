@@ -9,16 +9,18 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import me.givo.nationdbapiproject.dto.ContinentsDto;
+import me.givo.nationdbapiproject.dto.ContinentDto;
 import me.givo.nationdbapiproject.model.Continent;
 import me.givo.nationdbapiproject.repository.IContinentsJpaRepository;
+
+import javax.validation.Valid;
 
 @Service
 @Validated
 public class ContinentsServiceImpl implements IContinentsService {
 
-    private IContinentsJpaRepository continentsJpaRepository;
-    private ModelMapper modelMapper;
+    private final IContinentsJpaRepository continentsJpaRepository;
+    private final ModelMapper modelMapper;
 
     public ContinentsServiceImpl(IContinentsJpaRepository continentsJpaRepository, ModelMapper modelMapper) {
         this.continentsJpaRepository = continentsJpaRepository;
@@ -29,33 +31,34 @@ public class ContinentsServiceImpl implements IContinentsService {
     @Caching(evict = { @CacheEvict(value = "findContinentByName", allEntries = true),
             @CacheEvict(value = "findContinentById", allEntries = true),
             @CacheEvict(value = "findAllContinents", allEntries = true) })
-    public ContinentsDto create(ContinentsDto continentsDto) {
-        Continent continentsEntity = modelMapper.map(continentsDto, Continent.class);
+    public ContinentDto create(String name) {
+        ContinentDto continentDto = new ContinentDto(name);
+        Continent continentsEntity = modelMapper.map(validDto(continentDto), Continent.class);
         continentsJpaRepository.save(continentsEntity);
-        return modelMapper.map(continentsEntity, ContinentsDto.class);
+        return modelMapper.map(continentsEntity, ContinentDto.class);
     }
 
     @Override
     @Cacheable("findContinentByName")
-    public ContinentsDto findByName(String name) {
+    public ContinentDto findByName(String name) {
         Continent entity = continentsJpaRepository.findByName(name);
-        ContinentsDto dto = modelMapper.map(entity, ContinentsDto.class);
+        ContinentDto dto = modelMapper.map(entity, ContinentDto.class);
         return dto;
     }
 
     @Override
     @Cacheable("findContinentById")
-    public ContinentsDto findById(Integer id) {
+    public ContinentDto findById(Integer id) {
         Continent entity = continentsJpaRepository.getById(id);
-        ContinentsDto dto = modelMapper.map(entity, ContinentsDto.class);
+        ContinentDto dto = modelMapper.map(entity, ContinentDto.class);
         return dto;
     }
 
     @Override
     @Cacheable("findAllContinents")
-    public List<ContinentsDto> findAll() {
+    public List<ContinentDto> findAll() {
         List<Continent> entity = continentsJpaRepository.findAll();
-        List<ContinentsDto> dto = entity.stream().map(e -> modelMapper.map(e, ContinentsDto.class)).toList();
+        List<ContinentDto> dto = entity.stream().map(e -> modelMapper.map(e, ContinentDto.class)).toList();
         return dto;
     }
 
@@ -65,6 +68,11 @@ public class ContinentsServiceImpl implements IContinentsService {
             @CacheEvict(value = "findAllContinents", allEntries = true) })
     public void delete(Integer id) {
         continentsJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public ContinentDto validDto(@Valid ContinentDto dto) {
+        return dto;
     }
 
 }
