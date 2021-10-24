@@ -51,7 +51,7 @@ class ICountryStatsJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should find a CountryStats by Country entity")
+    @DisplayName("Should find a CountryStats list by Country entity")
     void findByCountries() {
 
         // Given

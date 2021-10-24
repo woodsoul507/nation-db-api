@@ -7,5 +7,7 @@ import me.givo.nationdbapiproject.model.Region;
 
 @Repository
 public interface IRegionsJpaRepository extends JpaRepository<Region, Integer> {
+
     Region findByName(String name);
+
 }
