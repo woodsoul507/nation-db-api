@@ -1,6 +1,6 @@
 package me.givo.nationdbapiproject.repository;
 
-import me.givo.nationdbapiproject.model.Continent;
+import me.givo.nationdbapiproject.model.Language;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,28 +11,29 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class IContinentsJpaRepositoryTest {
+class ILanguagesJpaRepositoryTest {
 
     @Autowired
-    IContinentsJpaRepository continentsJpaRepository;
+    ILanguagesJpaRepository languagesJpaRepository;
 
     @AfterEach
     void tearDown() {
-        continentsJpaRepository.deleteAll();
+        languagesJpaRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("Should find a Continent by its name")
-    void findByName() {
+    @DisplayName("Should find a Language by its name")
+    void findByLanguage() {
 
         // Given
-        Continent asia = new Continent("Asia");
-        continentsJpaRepository.save(asia);
+        Language english = new Language("English");
+        languagesJpaRepository.save(english);
 
         // When
-        Continent expected = continentsJpaRepository.findByName("Asia");
+        Language expected = languagesJpaRepository.findByLanguage("English");
 
         // Then
-        assertThat(expected.getName().equals(asia.getName())).isTrue();
+        assertThat(expected.getLanguage().equals("English")).isTrue();
+
     }
 }

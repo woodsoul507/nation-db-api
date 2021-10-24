@@ -12,6 +12,7 @@ import me.givo.nationdbapiproject.model.Language;
 
 @Repository
 public interface ICountryLanguagesJpaRepository extends JpaRepository<CountryLanguage, CountryLanguageId> {
+
     List<CountryLanguage> findByLanguages(Language language);
 
     List<CountryLanguage> findByCountries(Country countries);

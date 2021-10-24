@@ -1,6 +1,8 @@
 package me.givo.nationdbapiproject.repository;
 
 import me.givo.nationdbapiproject.model.Continent;
+import me.givo.nationdbapiproject.model.Region;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,28 +13,34 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class IContinentsJpaRepositoryTest {
+class IRegionsJpaRepositoryTest {
 
     @Autowired
     IContinentsJpaRepository continentsJpaRepository;
+    @Autowired
+    IRegionsJpaRepository regionsJpaRepository;
 
     @AfterEach
     void tearDown() {
+        regionsJpaRepository.deleteAll();
         continentsJpaRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("Should find a Continent by its name")
+    @DisplayName("Should find a Region by its name")
     void findByName() {
 
         // Given
-        Continent asia = new Continent("Asia");
-        continentsJpaRepository.save(asia);
+        Continent america = new Continent("America");
+        Region caribbean = new Region("Caribbean", america);
+        continentsJpaRepository.save(america);
+        regionsJpaRepository.save(caribbean);
 
         // When
-        Continent expected = continentsJpaRepository.findByName("Asia");
+        Region expected = regionsJpaRepository.findByName("Caribbean");
 
         // Then
-        assertThat(expected.getName().equals(asia.getName())).isTrue();
+        assertThat(expected.getName().equals("Caribbean")).isTrue();
+
     }
 }
