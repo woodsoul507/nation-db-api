@@ -1,12 +1,9 @@
 package me.givo.nationdbapiproject.service;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
+import me.givo.nationdbapiproject.dto.ContinentDto;
 import org.springframework.stereotype.Component;
 
-import me.givo.nationdbapiproject.dto.ContinentDto;
+import java.util.List;
 
 @Component
 public interface IContinentsService {
@@ -16,9 +13,4 @@ public interface IContinentsService {
 
     public void delete(Integer id);
 
-    public ContinentDto findById(Integer id);
-
-    public ContinentDto findByName(String name);
-
-    ContinentDto validDto(@Valid ContinentDto dto);
 }

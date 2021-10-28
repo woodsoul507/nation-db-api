@@ -1,17 +1,18 @@
 package me.givo.nationdbapiproject.controller;
 
+import me.givo.nationdbapiproject.dto.ContinentDto;
+import me.givo.nationdbapiproject.dto.CustomResponseDto;
+import me.givo.nationdbapiproject.service.ContinentsServiceImpl;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.*;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import me.givo.nationdbapiproject.dto.ContinentDto;
-import me.givo.nationdbapiproject.service.ContinentsServiceImpl;
-
+@Validated
 @RestController
 @RequestMapping("/continents")
 public class ContinentsController {
@@ -23,33 +24,94 @@ public class ContinentsController {
     }
 
     @GetMapping
-    public List<ContinentDto> findAll() {
-        List<ContinentDto> response = continentsService.findAll();
-        return response;
+    public ResponseEntity<Object> findAll() {
+        try {
+            List<ContinentDto> continentDtoList = continentsService.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(continentDtoList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
     }
 
-    @GetMapping("/findBy")
-    public ContinentDto find(@RequestParam(name = "name", required = false) String name,
-                             @RequestParam(name = "id", required = false) Integer id) {
-        if (name == null && id != null) {
-            return continentsService.findById(id);
+    @GetMapping("/findById")
+    @Cacheable(value = "findContinentById")
+    public ResponseEntity<Object> findById(@RequestParam(name = "id", required = false) @NotNull
+                                           @Min(1) Integer id) {
+        List<ContinentDto> continentDtoList;
+        try {
+            continentDtoList = continentsService.findAll();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
-        if (name != null && id == null) {
-            return continentsService.findByName(name);
+        try {
+            ContinentDto continentDtoById = continentDtoList.stream()
+                    .filter(continentDto -> id.equals(continentDto.getContinentId())).findAny().orElse(null);
+            if (continentDtoById != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(continentDtoById);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomResponseDto("404",
+                        "findById.id: not Continent with id=" + id,
+                        "/continents/findById"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
-        return null;
+
+    }
+
+    @GetMapping("/findByName")
+    @Cacheable(value = "findContinentByName")
+    public ResponseEntity<Object> findByName(@RequestParam(name = "name", required = false) @NotNull
+                                             @NotEmpty @NotBlank
+                                             @Pattern(regexp = "^[\\p{L} .'-]+$", message = "Only letters and spaces allowed.")
+                                             @Size(max = 255) String name) {
+        List<ContinentDto> continentDtoList;
+        try {
+            continentDtoList = continentsService.findAll();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
+
+        try {
+            ContinentDto continentDtoByName = continentDtoList.stream()
+                    .filter(continentDto -> name.equals(continentDto.getName())).findAny().orElse(null);
+            if (continentDtoByName != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(continentDtoByName);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomResponseDto("404",
+                        "findById.id: not Continent with name=" + name,
+                        "/continents/findByName"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
+
     }
 
     @PostMapping
-    public List<ContinentDto> create(@RequestParam("name") String name) {
-        continentsService.create(name);
-        return continentsService.findAll();
+    public ResponseEntity<Object> create(@RequestParam(value = "name") @NotNull
+                                         @NotEmpty @NotBlank
+                                         @Pattern(regexp = "^[\\p{L} .'-]+$", message = "Only letters and spaces allowed.")
+                                         @Size(max = 255) String name) {
+        try {
+            ContinentDto createdContinentDto = continentsService.create(name);
+            continentsService.findAll();
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdContinentDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e);
+        }
     }
 
     @DeleteMapping
-    public List<ContinentDto> delete(@RequestParam("id") Integer id) {
-        continentsService.delete(id);
-        return continentsService.findAll();
+    public ResponseEntity<Object> delete(@RequestParam("id") @NotNull
+                                         @Min(1) Integer id) {
+        try {
+            continentsService.delete(id);
+            continentsService.findAll();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
     }
 
 }
